@@ -1,0 +1,23 @@
+# Python / uv
+**/.venv/
+**/__pycache__/
+*.pyc
+
+# 생성 DB(프로토타입)
+*.db
+
+# 비밀키 — 절대 커밋 금지
+**/.env
+
+# Node / 프론트엔드(추후)
+**/node_modules/
+**/dist/
+
+# Cloudflare wrangler 로컬 캐시(계정 정보) — 커밋 금지
+.wrangler/
+
+# 주최측 원본 문서(민감) — 로컬 보관, 저장소 제외
+docs/*.pdf
+
+# OS
+.DS_Store

@@ -1,0 +1,88 @@
+  <!-- 문제 · 데이터셋 -->
+  <section>
+    <div class="shead"><span class="slabel">문제 · 데이터셋</span><h2>예측 과제 및 데이터셋 정의</h2>
+      <p class="lead">장비 유지보수 이력(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <span class="inlinecode">train</span> 15행으로 규칙을 추론하고, 채점은 숨겨진 <span class="inlinecode">test</span> 30행으로 이뤄집니다.</p>
+    </div>
+
+    <div class="card">
+      <p class="cap">쉽게 이해하기</p>
+      <p class="plainexp">군 설비(발전기·전술차량·통신장비·레이더 등)는 갑자기 고장 나면 작전·훈련에 큰 차질을 줍니다. 그래서 고장 뒤 수리가 아니라 <b>징후를 미리 읽어 예방 정비</b>하는 것이 핵심이고, 그러려면 방대한 정비 이력을 판단해야 합니다.</p>
+      <p class="plainexp">이 대회는 그 판단을 <b>LLM으로 자동화</b>합니다. 정비 이력을 보고 ① 곧 또 고장날 <b>위험이 얼마나 큰지</b>, ② <b>다음 정비를 언제</b> 해야 하는지를 분류하도록, 참가자가 <b>에이전트 행동 지침</b>을 설계하는 과제입니다.</p>
+      <p class="plainexp">여기서 참가자는 <b>직접 정답을 맞히거나 코드를 짜지 않습니다.</b> "AI에게 이렇게 판단하라"고 일러주는 <b>설명서(프롬프트) 한 장</b>만 씁니다 — 예컨대 "정비가 잦거나 가동시간이 길거나 최근에 고장났으면 위험을 높게 보라"처럼요. 그러면 채점 시스템이 그 설명서를 <b>숨겨진 30건에 그대로 실행</b>해, 정답과 얼마나 일치하는지로 점수를 매깁니다.</p>
+      <div class="example">
+        <div class="ex-in"><span class="ex-k">예: 발전기 1대의 정비 기록</span>
+          <ul>
+            <li>최근 1년 <b>6번</b> 정비 <span class="tagx">잦음</span></li>
+            <li>누적 <b>4,200시간</b> 가동 <span class="tagx">많음</span></li>
+            <li><b>20일 전</b>에도 고장 <span class="tagx">최근</span></li>
+          </ul>
+        </div>
+        <div class="ex-arrow" aria-hidden="true">→</div>
+        <div class="ex-out">
+          <div class="oo"><span class="ex-k">고장 위험</span><span class="lab high">HIGH</span><span class="plain"><b>높음</b></span></div>
+          <div class="oo"><span class="ex-k">다음 정비</span><span class="chip2">0-30</span><span class="plain"><b>30일 안에</b> 재정비</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="cap">과제 명세</p>
+      <div class="io">
+        <div class="io-col"><span class="ex-k">입력 · Input</span>
+          <div class="chips">
+            <span class="chip2">id</span><span class="chip2">장비유형</span><span class="chip2">수리 시작일</span><span class="chip2">수리 종료일</span><span class="chip2">정비 조치</span><span class="chip2">비용</span><span class="chip2">정비횟수<span class="dim">/1y</span></span><span class="chip2">가동시간</span><span class="chip2">직전고장 경과일</span>
+          </div>
+        </div>
+        <div class="io-arrow" aria-hidden="true">→</div>
+        <div class="io-col"><span class="ex-k">출력 · Output</span>
+          <div class="out-row"><span class="oc">risk_grade</span><span class="lab high">HIGH</span><span class="lab med">MEDIUM</span><span class="lab low">LOW</span></div>
+          <div class="out-row"><span class="oc">cycle_range</span><span class="chip2">0-30</span><span class="chip2">31-90</span><span class="chip2">91-180</span><span class="chip2">181+</span></div>
+        </div>
+      </div>
+      <div class="spec">
+        <div class="row"><span class="k">학습 예시</span><span class="v"><code>train.csv</code> 15행 — 입력 + 정답 <b>공개</b></span></div>
+        <div class="row"><span class="k">채점 대상</span><span class="v"><code>test.csv</code> 30행 — 입력·정답 <b>비공개</b>, 서버 보관</span></div>
+        <div class="row"><span class="k">평가 지표</span><span class="v">두 라벨 <b>Macro F1</b>의 평균 (아래 채점)</span></div>
+        <div class="row"><span class="k">정답 규칙</span><span class="v">결정론적 규칙(비공개) · 경계 케이스로 변별</span></div>
+      </div>
+    </div>
+
+    <div class="card tablecard">
+      <p class="cap">train.csv 데이터 예시 · 4행</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>id</th><th>장비</th><th>수리기간(일)</th><th>비용(원)</th><th>최근1년 정비(회)</th><th>누적가동(h)</th><th>직전고장(일 전)</th><th>→ 고장위험</th><th>→ 다음정비</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1</td><td>발전기</td><td class="mono">6</td><td class="mono">850,000</td><td class="mono">6</td><td class="mono">4,200</td><td class="mono">20</td><td><span class="lab high">HIGH</span></td><td class="mono">0-30</td></tr>
+            <tr><td class="mono">2</td><td>통신장비</td><td class="mono">2</td><td class="mono">120,000</td><td class="mono">1</td><td class="mono">1,500</td><td class="mono">140</td><td><span class="lab low">LOW</span></td><td class="mono">181+</td></tr>
+            <tr><td class="mono">3</td><td>전술차량</td><td class="mono">4</td><td class="mono">430,000</td><td class="mono">3</td><td class="mono">3,100</td><td class="mono">60</td><td><span class="lab med">MEDIUM</span></td><td class="mono">31-90</td></tr>
+            <tr><td class="mono">4</td><td>레이더</td><td class="mono">3</td><td class="mono">900,000</td><td class="mono">3</td><td class="mono">2,600</td><td class="mono">75</td><td><span class="lab med">MEDIUM</span></td><td class="mono">91-180</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="lblpair">
+        <div class="lblcol">
+          <p class="cap">① 고장 위험 등급 · risk_grade</p>
+          <p class="labdesc"><b>가까운 시일 내 다시 고장 날 가능성</b>을 세 단계로.<br>정비가 잦고 오래 가동됐거나 최근 고장났을수록 높음.</p>
+          <div class="scroll"><table><tbody>
+            <tr><td><span class="lab high">HIGH</span></td><td>정비 ≥ 5회 <b>또는</b> 가동 ≥ 4000h <b>또는</b> 직전고장 ≤ 30일</td></tr>
+            <tr><td><span class="lab med">MEDIUM</span></td><td>HIGH·LOW 어디에도 해당하지 않음</td></tr>
+            <tr><td><span class="lab low">LOW</span></td><td>정비 ≤ 2회 <b>그리고</b> 가동 &lt; 2000h <b>그리고</b> 직전고장 &gt; 90일</td></tr>
+          </tbody></table></div>
+        </div>
+        <div class="lblcol">
+          <p class="cap">② 다음 정비 시점 · cycle_range</p>
+          <p class="labdesc"><b>다음 정비까지 두어도 되는 기간</b>을 네 구간으로.<br>위험이 클수록 더 빨리 정비해야 함.</p>
+          <div class="scroll"><table><tbody>
+            <tr><td class="mono">0-30</td><td>30일 이내 재정비 · risk=HIGH</td></tr>
+            <tr><td class="mono">31-90</td><td>1~3개월 · MEDIUM &amp; 가동 ≥ 3000h</td></tr>
+            <tr><td class="mono">91-180</td><td>3~6개월 · MEDIUM &amp; 가동 &lt; 3000h</td></tr>
+            <tr><td class="mono">181+</td><td>6개월 초과 · risk=LOW</td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </section>

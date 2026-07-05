@@ -1,0 +1,66 @@
+  <!-- 채점 지표 -->
+  <section>
+    <div class="shead"><span class="slabel">채점 지표</span><h2>평가 지표 및 배점 체계</h2>
+      <p class="lead">정확도(Macro F1)와 간결성(<b>행동 지침 글자 수</b>)을 <b>단일 가중식</b>으로 통합합니다. 총 100점.</p>
+    </div>
+
+    <div class="card">
+      <p class="cap">100점 구성</p>
+      <div class="bar" role="img" aria-label="총점 100점: 과제수행 45, 수강률 25, 유효 10, 형식 10, 보안 10">
+        <div class="seg" style="flex:45;background:var(--blue)"><span class="pt">45</span><span class="nm">과제 수행</span></div>
+        <div class="seg" style="flex:25;background:#3f6293"><span class="pt">25</span><span class="nm">수강률</span></div>
+        <div class="seg" style="flex:10;background:#6b86ac"><span class="pt">10</span><span class="nm">유효</span></div>
+        <div class="seg" style="flex:10;background:#9fb2ca"><span class="pt">10</span><span class="nm">형식</span></div>
+        <div class="seg" style="flex:10;background:#cad4e1"><span class="pt" style="color:#4e5968">10</span><span class="nm" style="color:#4e5968">보안</span></div>
+      </div>
+      <div class="lg">
+        <div class="r"><span class="sw" style="background:var(--blue)"></span><span>과제 수행 <small>정확도 40.5 + 간결성 4.5</small></span><span class="pv">45</span></div>
+        <div class="r"><span class="sw" style="background:#3f6293"></span><span>온라인 수강률 <small>VOD 3개 각 30%↑</small></span><span class="pv">25</span></div>
+        <div class="r"><span class="sw" style="background:#6b86ac"></span><span>결과값 유효성 <small>답변 파싱·허용값</small></span><span class="pv">10</span></div>
+        <div class="r"><span class="sw" style="background:#9fb2ca"></span><span>제출형식 준수 <small>출력 계약 준수</small></span><span class="pv">10</span></div>
+        <div class="r"><span class="sw" style="background:#cad4e1"></span><span>보안 적합성 <small>개인정보·금지어</small></span><span class="pv">10</span></div>
+      </div>
+      <p class="note">정확도가 0.9 가중 → 오답은 자동으로 저득점, 별도 게이트 불필요.</p>
+    </div>
+
+    <div class="mcard">
+      <div class="mtitle">① 정확도 · Macro F1</div>
+      <div class="mbody">
+        <div class="eq"><div class="eqin">F1<sub>c</sub>   = 2·P<sub>c</sub>·R<sub>c</sub> / (P<sub>c</sub> + R<sub>c</sub>)
+MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
+<span class="lhs">평균F1</span>  = ( F1<sub>risk</sub> + F1<sub>cycle</sub> ) / 2</div></div>
+        <ul class="defn">
+          <li><span class="dt">정밀도 P</span><span>모델이 A라고 답한 것 중 실제로 A였던 비율</span></li>
+          <li><span class="dt">재현율 R</span><span>실제 A 중 모델이 A로 맞힌 비율</span></li>
+          <li><span class="dt">F1</span><span>정밀도·재현율을 합친 값 (조화평균)</span></li>
+          <li><span class="dt">Macro F1</span><span>등급마다 F1을 구해 평균 — 드문 등급도 공평</span></li>
+          <li><span class="dt">평균 F1</span><span>두 라벨(위험·주기) F1의 평균 → 정확도</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mcard">
+      <div class="mtitle">② 간결성 · 행동 지침 글자 수 L</div>
+      <div class="mbody">
+        <div class="eq"><div class="eqin"><span class="lhs">간결성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
+단, C_min = 200,  C_max = 3000</div></div>
+        <ul class="defn">
+          <li><span class="dt">L</span><span>행동 지침 글자 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
+          <li><span class="dt">200자 이하</span><span>1점 (만점)</span></li>
+          <li><span class="dt">3000자</span><span>0점 (하드 캡)</span></li>
+          <li><span class="dt">의미</span><span>좋은 지침일수록 군더더기가 적다는 가정</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mcard">
+      <div class="mtitle">③ 통합 · 총점 (90/10 가중)</div>
+      <div class="mbody">
+        <div class="eq"><div class="eqin"><span class="lhs">과제수행</span> = 45 · ( <span class="w">0.9</span>·평균F1 + <span class="w">0.1</span>·간결성 )
+<span class="lhs">총점</span>     = 과제수행 + 25·VOD + 10·유효 + 10·형식 + 10·보안</div></div>
+        <ul class="defn">
+          <li><span class="dt">과제수행</span><span>정답 90% + 간결성 10% → 45점</span></li>
+          <li><span class="dt">＋ 나머지</span><span>수강률 25 · 유효 10 · 형식 10 · 보안 10</span></li>
+          <li><span class="dt">핵심</span><span>정답이 압도적 비중이라 오답은 자동으로 하위권</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>

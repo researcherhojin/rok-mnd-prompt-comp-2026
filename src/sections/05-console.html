@@ -1,0 +1,48 @@
+  <!-- 제출 콘솔 -->
+  <section>
+    <div class="shead"><span class="slabel">참가자 대시보드</span><h2>참가자 제출·검증 환경</h2>
+      <p class="lead">코딩 테스트처럼 <b>행동 지침</b>을 작성해 <b>[샘플 실행]</b>(공개 train)으로 검증하고 <b>[제출]</b>합니다 · 실행 50회 / 제출 3회 (1일).</p>
+    </div>
+    <div class="ide">
+      <div class="ide-bar">
+        <span class="ide-dots"><i></i><i></i><i></i></span>
+        <span class="ide-tab">agent_instructions.txt</span>
+        <span class="ide-quota">미리보기 <b>47/50</b> · 제출 <b>2/3</b></span>
+      </div>
+      <div class="ide-editor">
+        <pre class="gutter">1
+2
+3
+4
+5</pre>
+        <pre class="code">너는 국방 설비 정비 분석가다.
+아래 정비 이력을 보고 고장위험등급과
+다음 정비주기를 판단하라.
+입력: <span class="ph">{{input}}</span>
+출력: `위험, 주기` 한 줄 (예: HIGH, 0-30)</pre>
+      </div>
+      <div class="ide-toolbar">
+        <span class="charcnt">100 / 3000자</span>
+        <span class="spacer"></span>
+        <span class="btn-run">▶ 샘플 실행</span>
+        <span class="btn-submit">제출 →</span>
+      </div>
+      <div class="ide-results">
+        <div class="res-head">샘플 테스트 · 공개 train 5행 <span class="n">(공식 채점 아님)</span></div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>#</th><th>입력 (요약)</th><th>기대 정답</th><th>에이전트 출력</th><th>판정</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">1</td><td>발전기 · 정비6 · 4,200h</td><td class="mono">HIGH, 0-30</td><td class="mono">HIGH, 0-30</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">2</td><td>통신장비 · 정비1 · 1,500h</td><td class="mono">LOW, 181+</td><td class="mono">LOW, 181+</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">3</td><td>전술차량 · 정비3 · 3,100h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 31-90</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">4</td><td>레이더 · 정비3 · 2,600h</td><td class="mono">MEDIUM, 91-180</td><td class="mono">MEDIUM, 91-180</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">5</td><td>화포 · 정비4 · 3,300h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 0-30</td><td><span class="pill fail">실패</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 test 채점과 다를 수 있음</span></div>
+      </div>
+    </div>
+    <p class="note">[샘플 실행]은 정답이 공개된 train으로 즉시 결과를 보여주고, [제출]만 숨겨진 test 30행으로 공식 채점됩니다.</p>
+  </section>
