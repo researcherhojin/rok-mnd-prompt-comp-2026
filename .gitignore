@@ -16,8 +16,8 @@
 # Cloudflare wrangler 로컬 캐시(계정 정보) — 커밋 금지
 .wrangler/
 
-# 주최측 원본 문서(민감) — 로컬 보관, 저장소 제외
-docs/*.pdf
+# 주최측 원본 문서·교육자료(민감·대용량) — 로컬 보관, 저장소 제외
+docs/
 
 # OS
 .DS_Store

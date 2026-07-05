@@ -1,4 +1,5 @@
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/prototype/backend/.venv/bin/python",
-  "python.analysis.extraPaths": ["${workspaceFolder}/prototype/backend"]
+  "// 참고": "site/index.html·src/sections/06b-architecture.html은 build.js 생성물이며, 인라인 SVG(mermaid) 안 <style>을 CSS 분석기가 오탐(빈 룰셋·katex 참조 등)합니다. 브라우저 렌더는 정상이므로 HTML 내장 <style> 검증만 끕니다. 실제 CSS는 src/styles/*.css로 검증됩니다.",
+  "html.validate.styles": false,
+  "css.lint.emptyRules": "ignore"
 }
