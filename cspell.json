@@ -80,6 +80,21 @@
     "autoincrement",
     "importlib",
     "CORS",
-    "pyright"
+    "pyright",
+    "rmpc",
+    "researcherhojin",
+    "RMSE",
+    "katex",
+    "eqin",
+    "summarycard",
+    "qlist",
+    "adlist",
+    "scol",
+    "snote",
+    "archsvg",
+    "archnote",
+    "dgrid",
+    "dcard",
+    "pycache"
   ]
 }

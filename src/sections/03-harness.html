@@ -1,15 +1,15 @@
   <!-- 하네스 -->
   <section>
-    <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동채점 하네스 구조</h2>
-      <p class="lead">프롬프트 입력·모델 호출·파싱·채점까지 <b>결정론적 배관은 우리가 구축해 고정</b>합니다.<br>참가자는 <span class="hl">LLM에 줄 행동 지침만</span> 작성하며, <b>전처리·피처 유도·추론·분류를 모두 그 지침으로</b> 지시합니다.<br>우리가 전처리 로직을 짜서 잠그는 게 아니라, 참가자가 프롬프트로 분석할 수 있는 판을 고정하는 것입니다.</p>
+    <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동 실행·채점 구조 (하네스)</h2>
+      <p class="lead">참가자는 코드·정답 파일이 아니라, LLM이 데이터를 <b>어떻게 읽고 판단할지</b>를 지시하는 <span class="hl">행동 지침 프롬프트</span>만 제출합니다.<br>주최 측은 이를 <b>동일 조건에서 재실행</b>해 정답과 대조·채점하며(이 고정 절차가 <b>하네스</b>), 정답 로직이 아니라 <b>프롬프트의 지시 품질</b>을 평가합니다.</p>
     </div>
     <div class="card">
       <div class="harness">
-        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">test 레코드를 raw JSON으로 프롬프트에 입력 — 파생값은 만들지 않음</span></span><span class="htag fixed">고정</span></div>
-        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 에이전트 호출 <span class="sub">행동 지침이 전처리·추론·분류를 모두 지시 · gpt-4.1-nano 스냅샷 고정 · temperature 0 · seed 고정 · 행당 1회</span></span><span class="htag part">참가자 작성</span></div>
-        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱 · 검증 <span class="sub">마지막 줄의 `risk_grade, cycle_range`만 계약 파싱 · 형식 위반·허용값 밖은 행 0점</span></span><span class="htag fixed">고정</span></div>
-        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조 · 채점 <span class="sub">Macro F1 · 간결성 · 통합 산식 · 원출력 저장</span></span><span class="htag fixed">고정</span></div>
+        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">비공개 데이터를 raw JSON으로 프롬프트에 입력 — 파생 변수·정답 힌트 없이 모든 참가자가 동일 조건</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 실행 <span class="sub">행동 지침이 컬럼 해석·판단 기준·출력 형식을 지시 · 모델·temperature·출력형식 고정 (예시 gpt-4.1-nano — 운영 모델은 비용·성능 검증 후 확정)</span></span><span class="htag part">참가자 작성</span></div>
+        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱·검증 <span class="sub">마지막 줄 `risk_grade, cycle_range` 계약 파싱 · 필수값·허용 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조·채점 <span class="sub">비공개 정답과 대조 → 두 라벨 Macro F1 평균 등 지표 산정 · 원출력·채점결과 저장(재현·감사)</span></span><span class="htag fixed">주최 고정</span></div>
       </div>
-      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">2단계 행동 지침 하나</b>뿐입니다. 예컨대 "수리기간 = 종료일 − 시작일을 먼저 구하고 가동시간을 정규화한 뒤 분류하라"처럼 <b>전처리 로직까지 지침에 담으면</b> 모델이 그 지시를 프롬프트 문맥 안에서 그대로 수행합니다. 프롬프트 입력·출력 계약·채점 산식은 하네스가 강제하고 <b>모델 스냅샷·seed·temperature를 고정</b>하므로, 같은 지침은 언제 재실행해도 같은 점수로 재현됩니다. 정답셋과 API 키는 채점 워커에만 격리되어, 정답을 하드코딩하거나 채점을 우회할 경로가 구조적으로 없습니다. (전처리를 별도 LLM 호출로 분리하는 다단계 파이프라인은 2차 PBL 대회의 확장 옵션입니다.)</p>
+      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 코드·정답 파일·모델 설정·채점 기준·비공개 데이터에는 접근할 수 없습니다. 프롬프트에는 <b>컬럼 해석·변수 우선순위·등급/구간 기준·경계 사례·출력 형식·불확실 처리</b>를 담을 수 있습니다. 모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 정답셋·API 키는 채점 워커에만 격리됩니다. (전처리→판단→출력을 <b>노드별 프롬프트</b>로 나누는 가이드형 다단계(Shape B)는 <b>열린 결정 ④</b> · 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.)</p>
     </div>
   </section>

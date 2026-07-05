@@ -27,13 +27,16 @@
   *{box-sizing:border-box}
   .wrap{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
     -webkit-font-smoothing:antialiased;padding:clamp(24px,4vw,56px) clamp(16px,4vw,44px);min-height:100%}
-  .inner{max-width:960px;margin:0 auto}
+  /* 한국어 줄바꿈: 서술 문단만 어절 단위로 (표·칩·목업·그리드 셀 미적용) */
+  .lede,.lead,.note,.snote,.qlist li,.histcap,.plainexp,.warn,.fact .fv,.fact .fk,
+  .dcard h4,.dcard p,.adlist span,.labdesc,.summarycard,.summarycard *{word-break:keep-all}
+  .inner{max-width:1040px;margin:0 auto}
   b,strong{font-weight:700}
 
   /* hero */
   .eyebrow{font-size:14px;font-weight:700;color:var(--blue)}
   h1{font-size:clamp(24px,3.3vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.25;margin:.42em 0 .5em}
-  .lede{color:var(--sub);font-size:16.5px;line-height:1.72;max-width:820px} .lede b{color:var(--ink)}
+  .lede{color:var(--sub);font-size:16.5px;line-height:1.72} .lede b{color:var(--ink)}
   .hl{color:var(--blue);font-weight:700;background:var(--blue-soft);border-radius:6px;padding:1px 6px}
 
   .facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px}
@@ -47,7 +50,7 @@
   section:first-of-type{margin-top:clamp(26px,3.2vw,38px)}
   .slabel{display:inline-block;font-size:13px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:5px 12px;border-radius:999px}
   .shead h2{font-size:clamp(21px,2.7vw,27px);font-weight:800;letter-spacing:-.02em;margin:14px 0 0}
-  .lead{color:var(--sub);font-size:15.5px;line-height:1.7;margin:10px 0 0;max-width:74ch} .lead b{color:var(--ink)} .lead .hl{padding:1px 6px}
+  .lead{color:var(--sub);font-size:15.5px;line-height:1.7;margin:10px 0 0} .lead b{color:var(--ink)} .lead .hl{padding:1px 6px}
   .shead{margin-bottom:22px}
 
   .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:clamp(18px,2.6vw,26px)}
@@ -178,9 +181,51 @@
 
   /* footer */
   .foot{margin-top:60px;padding-top:26px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:26px 48px}
-  .fcol{display:flex;flex-direction:column;gap:9px} .fcol-k{font-size:12px;font-weight:700;color:var(--muted)}
-  .doc{font-size:13.5px;color:var(--sub);text-decoration:none;font-weight:500} .doc b{color:var(--ink);font-weight:700;margin-right:6px}
+  .fcol{display:flex;flex-direction:column;gap:9px;min-width:0} .fcol-k{font-size:12px;font-weight:700;color:var(--muted)}
+  .doc{font-size:13.5px;color:var(--sub);text-decoration:none;font-weight:500;overflow-wrap:anywhere} .doc b{color:var(--ink);font-weight:700;margin-right:6px}
   a.doc:hover{color:var(--blue)} a.doc::after{content:" ↗";color:var(--muted);font-size:11px}
+
+  /* top decision summary */
+  .summarycard{border-top:3px solid var(--blue)}
+  .qlist{margin:14px 0 0;padding:0;list-style:none;counter-reset:q;display:grid;gap:11px}
+  @media(min-width:760px){.qlist{grid-template-columns:1fr 1fr;column-gap:26px}}
+  .qlist li{counter-increment:q;position:relative;padding-left:34px;font-size:14.5px;color:var(--sub);line-height:1.55}
+  .qlist li b{color:var(--ink);font-weight:700}
+  .qlist li::before{content:counter(q);position:absolute;left:0;top:0;width:23px;height:23px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+  /* allow/deny examples (LLM helper) */
+  .adlist{display:grid;gap:8px;margin:10px 0 0} .adlist .a,.adlist .d{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5}
+  .adlist .mk{flex:none;font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px} .adlist .a .mk{color:var(--green);background:var(--green-soft)} .adlist .d .mk{color:var(--red);background:var(--red-soft)}
+
+  /* flags: 미정 배지 · 경고 콜아웃 */
+  .tbd{font-size:11px;font-weight:800;color:var(--amber);background:var(--amber-soft);padding:3px 9px;border-radius:999px;margin-left:8px;white-space:nowrap}
+  .warn{background:var(--amber-soft);border-radius:var(--r2);padding:16px 18px;margin-top:16px;font-size:14px;color:var(--ink);line-height:1.65}
+  .warn .wk{font-weight:800;color:var(--amber);margin-right:6px} .warn b{font-weight:800} .warn+.warn{margin-top:12px}
+
+  /* split scoring (리더보드 / 토탈) */
+  .split{display:grid;gap:16px} @media(min-width:760px){.split{grid-template-columns:1fr 1fr}}
+  .scol{background:var(--raise);border-radius:var(--r2);padding:18px 20px}
+  .scol.lead-col{background:var(--blue-soft)}
+  .scol .sk{display:flex;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:800;color:var(--blue-strong)}
+  .scol .si{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+  .scol .si .it{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--sub);border-bottom:1px solid var(--line);padding-bottom:9px} .scol .si .it:last-child{border-bottom:none;padding-bottom:0}
+  .scol .si .it b{color:var(--ink);font-weight:700} .scol .si .it small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:2px}
+  .scol .snote{margin:12px 0 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+
+  /* system architecture (프리렌더 SVG) */
+  .archsvg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
+  .archsvg-wrap svg{height:auto;display:block;margin:0 auto}
+  .lbnote.archnote{grid-template-columns:1fr;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  .archnote .ln{align-items:flex-start} .archnote .lk{margin-top:1px}
+
+  /* decisions panel (열린 결정 · 미송 논의) */
+  .dgrid{display:grid;gap:14px;margin-top:16px} @media(min-width:760px){.dgrid{grid-template-columns:1fr 1fr}}
+  .dcard{background:var(--card);border-radius:var(--r2);box-shadow:var(--shadow);padding:18px 20px;border-left:3px solid var(--blue)}
+  .dcard .dn{font-size:11.5px;font-weight:800;color:var(--blue);background:var(--blue-soft);padding:3px 10px;border-radius:999px}
+  .dcard h4{margin:11px 0 7px;font-size:15px;font-weight:800}
+  .dcard p{margin:0;font-size:13.5px;color:var(--sub);line-height:1.6} .dcard p b{color:var(--ink);font-weight:700}
+  .dcard .lean{margin-top:9px;font-size:12.5px;color:var(--blue-strong);font-weight:600}
+  .dcard.flaw{border-left-color:var(--amber)} .dcard.flaw .dn{color:var(--amber);background:var(--amber-soft)} .dcard.flaw .lean{color:var(--amber)}
 
   a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -191,28 +236,44 @@
  <div class="inner">
 
   <header>
-    <span class="eyebrow">국방AI 프롬프트 경진대회 · 출제안 4</span>
-    <h1>설비 정비주기 예측형 — 자동채점·리더보드 설계</h1>
-    <p class="lede">전처리·실행·채점까지 <b>전체 하네스는 우리가 만들어 고정</b>하고, 참가자는 그 안에서 <span class="hl">LLM에 줄 행동 지침만</span> 작성합니다.<br>이 문서는 자문 범위 세 축(문제·데이터셋 / 자동채점 / 리더보드)을 한눈에 정리합니다.</p>
+    <span class="eyebrow">국방AI 프롬프트 경진대회 · 출제 후보 04</span>
+    <h1>설비 정비주기 예측형 — 자동채점·리더보드 설계안</h1>
+    <p class="lede">입력→LLM 실행→파싱→채점까지 <b>자동 실행·채점 구조는 주최 측이 고정</b>하고, 참가자는 <span class="hl">LLM 행동 지침 프롬프트</span>만 작성합니다.<br>자문 범위 세 축(문제·데이터셋 / 자동채점 / 리더보드)을 정리하고, <b>미송 논의가 필요한 열린 결정</b>을 아래에 모았습니다.</p>
     <div class="facts">
-      <div class="fact"><div class="fk">규모</div><div class="fv">약 1만 명 · 동시 500</div></div>
-      <div class="fact"><div class="fk">참가자 작성</div><div class="fv">에이전트 행동 지침</div></div>
-      <div class="fact"><div class="fk">제출 / 실행</div><div class="fv">1일 3회 / 50회</div></div>
-      <div class="fact"><div class="fk">채점</div><div class="fv">정답 대조 · Macro F1</div></div>
+      <div class="fact"><div class="fk">규모</div><div class="fv">약 1만 명 · 예상 동시 500명(추정)</div></div>
+      <div class="fact"><div class="fk">참가자 작성</div><div class="fv">에이전트 행동 지침 프롬프트</div></div>
+      <div class="fact"><div class="fk">1일 한도(예정)</div><div class="fv">미리보기 50 · 제출 3</div></div>
+      <div class="fact"><div class="fk">채점</div><div class="fv">정답 대조 · Macro F1 중심</div></div>
     </div>
   </header>
+
+  <!-- 상단 요약: 미송 결정 요청 -->
+  <section>
+    <div class="card summarycard">
+      <p class="cap">미송님 확인 필요 · 결정 5가지</p>
+      <p class="lead" style="margin-top:6px">본 문서는 4개 후보 주제 중 <b>‘설비 정비주기 예측형’ 1개 기준</b>의 상세 설계안입니다.<br>아래 5가지가 확정되면 배점·문제 수·제출 형태 등 나머지 설계가 정해집니다.</p>
+      <ol class="qlist">
+        <li>대회 목적은 <b>LLM 활용 능력 평가</b>에 가까운가, <b>AI 활용 경험 제공</b>에 가까운가?</li>
+        <li>참가자는 <b>4개 문제 전부</b>를 푸는가 <b>일부 선택</b>인가? (점수: 합 / 평균 / 최고점)</li>
+        <li>리더보드는 <b>결과 성능 중심</b>인가, <b>프롬프트 효율성 포함</b>인가?</li>
+        <li>제출 방식은 <b>단일 프롬프트형</b>인가, <b>단계별 가이드형</b>인가?</li>
+        <li>샘플 규칙이 <b>너무 쉽게 추론되는 문제</b>를 재설계해도 되는가?</li>
+      </ol>
+    </div>
+  </section>
 
   <!-- 문제 · 데이터셋 -->
   <section>
     <div class="shead"><span class="slabel">문제 · 데이터셋</span><h2>예측 과제 및 데이터셋 정의</h2>
-      <p class="lead">장비 유지보수 이력(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <span class="inlinecode">train</span> 15행으로 규칙을 추론하고, 채점은 숨겨진 <span class="inlinecode">test</span> 30행으로 이뤄집니다.</p>
+      <p class="lead">장비 유지보수 이력(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <b>샘플 데이터</b> 15행으로 규칙을 추론하고, 채점은 숨겨진 <b>비공개 데이터</b> 30행으로 이뤄집니다.<br><span class="dim">(30행은 설명·검증용 기준 — 실제 운영 시 리더보드 안정성·변별력을 위해 100~300행 확장 검토)</span></p>
     </div>
 
     <div class="card">
       <p class="cap">쉽게 이해하기</p>
       <p class="plainexp">군 설비(발전기·전술차량·통신장비·레이더 등)는 갑자기 고장 나면 작전·훈련에 큰 차질을 줍니다. 그래서 고장 뒤 수리가 아니라 <b>징후를 미리 읽어 예방 정비</b>하는 것이 핵심이고, 그러려면 방대한 정비 이력을 판단해야 합니다.</p>
       <p class="plainexp">이 대회는 그 판단을 <b>LLM으로 자동화</b>합니다. 정비 이력을 보고 ① 곧 또 고장날 <b>위험이 얼마나 큰지</b>, ② <b>다음 정비를 언제</b> 해야 하는지를 분류하도록, 참가자가 <b>에이전트 행동 지침</b>을 설계하는 과제입니다.</p>
-      <p class="plainexp">여기서 참가자는 <b>직접 정답을 맞히거나 코드를 짜지 않습니다.</b> "AI에게 이렇게 판단하라"고 일러주는 <b>설명서(프롬프트) 한 장</b>만 씁니다 — 예컨대 "정비가 잦거나 가동시간이 길거나 최근에 고장났으면 위험을 높게 보라"처럼요. 그러면 채점 시스템이 그 설명서를 <b>숨겨진 30건에 그대로 실행</b>해, 정답과 얼마나 일치하는지로 점수를 매깁니다.</p>
+      <p class="plainexp">참가자는 <b>코드를 작성하거나 정답 파일을 직접 제출하지 않습니다.</b> 대신 LLM이 데이터를 어떻게 읽고, 어떤 기준으로 판단하고, 어떤 형식으로 답할지를 설명하는 <b>행동 지침 프롬프트</b>를 씁니다 — 예컨대 "정비가 잦거나 가동시간이 길거나 최근에 고장났으면 위험을 높게 보라"처럼요. 그러면 채점 시스템이 그 지침을 <b>숨겨진 30건에 그대로 실행</b>해, 정답과 얼마나 일치하는지로 점수를 매깁니다.</p>
+      <p class="plainexp"><b>합성 데이터를 쓰는 이유 —</b> 실제 군 정비 데이터는 보안·반출 이슈가 있어, 정비 업무 구조를 <b>모사한 합성 데이터</b>를 씁니다. 군 장비 정비 맥락은 이해되되 <b>특정 부대·장비·작전 정보는 드러나지 않게</b> 설계합니다.</p>
       <div class="example">
         <div class="ex-in"><span class="ex-k">예: 발전기 1대의 정비 기록</span>
           <ul>
@@ -244,15 +305,15 @@
         </div>
       </div>
       <div class="spec">
-        <div class="row"><span class="k">학습 예시</span><span class="v"><code>train.csv</code> 15행 — 입력 + 정답 <b>공개</b></span></div>
-        <div class="row"><span class="k">채점 대상</span><span class="v"><code>test.csv</code> 30행 — 입력·정답 <b>비공개</b>, 서버 보관</span></div>
+        <div class="row"><span class="k">샘플 데이터</span><span class="v"><code>sample.csv</code> 15행 — 입력 + 정답 <b>공개</b></span></div>
+        <div class="row"><span class="k">비공개 데이터</span><span class="v"><code>private.csv</code> 30행 — 입력·정답 <b>비공개</b>, 서버 보관</span></div>
         <div class="row"><span class="k">평가 지표</span><span class="v">두 라벨 <b>Macro F1</b>의 평균 (아래 채점)</span></div>
-        <div class="row"><span class="k">정답 규칙</span><span class="v">결정론적 규칙(비공개) · 경계 케이스로 변별</span></div>
+        <div class="row"><span class="k">정답 규칙</span><span class="v">설명용 규칙 제공 · 실제 규칙은 <b>참가자에게 비공개</b>·복합 조건 재설계</span></div>
       </div>
     </div>
 
     <div class="card tablecard">
-      <p class="cap">train.csv 데이터 예시 · 4행</p>
+      <p class="cap">샘플 데이터(sample.csv) 예시 · 4행</p>
       <div class="scroll">
         <table>
           <thead><tr><th>id</th><th>장비</th><th>수리기간(일)</th><th>비용(원)</th><th>최근1년 정비(회)</th><th>누적가동(h)</th><th>직전고장(일 전)</th><th>→ 고장위험</th><th>→ 다음정비</th></tr></thead>
@@ -267,6 +328,7 @@
     </div>
 
     <div class="card">
+      <p class="labdesc" style="margin-bottom:16px">아래 규칙은 <b>설명용 예시</b>입니다. 실제 채점용 <b>비공개 데이터의 정답 생성 규칙은 그대로 공개하지 않으며</b>, 복합 조건·경계 케이스·노이즈로 변별력을 확보합니다.</p>
       <div class="lblpair">
         <div class="lblcol">
           <p class="cap">① 고장 위험 등급 · risk_grade</p>
@@ -288,52 +350,60 @@
           </tbody></table></div>
         </div>
       </div>
+      <div class="warn"><span class="wk">데이터 결함 · 재설계 필요</span>현재 규칙은 <b>설명용으로는 적합하나 실제 출제 규칙으로는 변별력이 부족</b>합니다. 참가자가 컬럼 설명·문제 조건을 그대로 LLM에 입력하면 고득점할 수 있으므로, 실제 비공개 채점셋은 <b>비선형 조건·특성 상호작용·경계 사례·일부 노이즈</b>를 포함해 <b>별도로 재설계</b>해야 합니다. (열린 결정 ⑤)</div>
     </div>
   </section>
 
   <!-- 하네스 -->
   <section>
-    <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동채점 하네스 구조</h2>
-      <p class="lead">프롬프트 입력·모델 호출·파싱·채점까지 <b>결정론적 배관은 우리가 구축해 고정</b>합니다.<br>참가자는 <span class="hl">LLM에 줄 행동 지침만</span> 작성하며, <b>전처리·피처 유도·추론·분류를 모두 그 지침으로</b> 지시합니다.<br>우리가 전처리 로직을 짜서 잠그는 게 아니라, 참가자가 프롬프트로 분석할 수 있는 판을 고정하는 것입니다.</p>
+    <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동 실행·채점 구조 (하네스)</h2>
+      <p class="lead">참가자는 코드·정답 파일이 아니라, LLM이 데이터를 <b>어떻게 읽고 판단할지</b>를 지시하는 <span class="hl">행동 지침 프롬프트</span>만 제출합니다.<br>주최 측은 이를 <b>동일 조건에서 재실행</b>해 정답과 대조·채점하며(이 고정 절차가 <b>하네스</b>), 정답 로직이 아니라 <b>프롬프트의 지시 품질</b>을 평가합니다.</p>
     </div>
     <div class="card">
       <div class="harness">
-        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">test 레코드를 raw JSON으로 프롬프트에 입력 — 파생값은 만들지 않음</span></span><span class="htag fixed">고정</span></div>
-        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 에이전트 호출 <span class="sub">행동 지침이 전처리·추론·분류를 모두 지시 · gpt-4.1-nano 스냅샷 고정 · temperature 0 · seed 고정 · 행당 1회</span></span><span class="htag part">참가자 작성</span></div>
-        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱 · 검증 <span class="sub">마지막 줄의 `risk_grade, cycle_range`만 계약 파싱 · 형식 위반·허용값 밖은 행 0점</span></span><span class="htag fixed">고정</span></div>
-        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조 · 채점 <span class="sub">Macro F1 · 간결성 · 통합 산식 · 원출력 저장</span></span><span class="htag fixed">고정</span></div>
+        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">비공개 데이터를 raw JSON으로 프롬프트에 입력 — 파생 변수·정답 힌트 없이 모든 참가자가 동일 조건</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 실행 <span class="sub">행동 지침이 컬럼 해석·판단 기준·출력 형식을 지시 · 모델·temperature·출력형식 고정 (예시 gpt-4.1-nano — 운영 모델은 비용·성능 검증 후 확정)</span></span><span class="htag part">참가자 작성</span></div>
+        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱·검증 <span class="sub">마지막 줄 `risk_grade, cycle_range` 계약 파싱 · 필수값·허용 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조·채점 <span class="sub">비공개 정답과 대조 → 두 라벨 Macro F1 평균 등 지표 산정 · 원출력·채점결과 저장(재현·감사)</span></span><span class="htag fixed">주최 고정</span></div>
       </div>
-      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">2단계 행동 지침 하나</b>뿐입니다. 예컨대 "수리기간 = 종료일 − 시작일을 먼저 구하고 가동시간을 정규화한 뒤 분류하라"처럼 <b>전처리 로직까지 지침에 담으면</b> 모델이 그 지시를 프롬프트 문맥 안에서 그대로 수행합니다. 프롬프트 입력·출력 계약·채점 산식은 하네스가 강제하고 <b>모델 스냅샷·seed·temperature를 고정</b>하므로, 같은 지침은 언제 재실행해도 같은 점수로 재현됩니다. 정답셋과 API 키는 채점 워커에만 격리되어, 정답을 하드코딩하거나 채점을 우회할 경로가 구조적으로 없습니다. (전처리를 별도 LLM 호출로 분리하는 다단계 파이프라인은 2차 PBL 대회의 확장 옵션입니다.)</p>
+      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 코드·정답 파일·모델 설정·채점 기준·비공개 데이터에는 접근할 수 없습니다. 프롬프트에는 <b>컬럼 해석·변수 우선순위·등급/구간 기준·경계 사례·출력 형식·불확실 처리</b>를 담을 수 있습니다. 모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 정답셋·API 키는 채점 워커에만 격리됩니다. (전처리→판단→출력을 <b>노드별 프롬프트</b>로 나누는 가이드형 다단계(Shape B)는 <b>열린 결정 ④</b> · 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.)</p>
     </div>
   </section>
 
   <!-- 채점 지표 -->
   <section>
     <div class="shead"><span class="slabel">채점 지표</span><h2>평가 지표 및 배점 체계</h2>
-      <p class="lead">정확도(Macro F1)와 간결성(<b>행동 지침 글자 수</b>)을 <b>단일 가중식</b>으로 통합합니다. 총 100점.</p>
+      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다 — 아래 <b>열린 결정</b> 참고.</p>
     </div>
 
     <div class="card">
-      <p class="cap">100점 구성</p>
-      <div class="bar" role="img" aria-label="총점 100점: 과제수행 45, 수강률 25, 유효 10, 형식 10, 보안 10">
-        <div class="seg" style="flex:45;background:var(--blue)"><span class="pt">45</span><span class="nm">과제 수행</span></div>
-        <div class="seg" style="flex:25;background:#3f6293"><span class="pt">25</span><span class="nm">수강률</span></div>
-        <div class="seg" style="flex:10;background:#6b86ac"><span class="pt">10</span><span class="nm">유효</span></div>
-        <div class="seg" style="flex:10;background:#9fb2ca"><span class="pt">10</span><span class="nm">형식</span></div>
-        <div class="seg" style="flex:10;background:#cad4e1"><span class="pt" style="color:#4e5968">10</span><span class="nm" style="color:#4e5968">보안</span></div>
+      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 미송 논의</span></p>
+      <div class="split">
+        <div class="scol lead-col">
+          <div class="sk">리더보드 점수 · 실시간 경쟁</div>
+          <div class="si">
+            <div class="it"><span><b>결과값 유효성</b><small>예측 정확성 · 출력 신뢰 (Macro F1)</small></span></div>
+            <div class="it"><span><b>프롬프트 효율성</b><small>지침 글자 · 토큰 수</small></span></div>
+          </div>
+          <p class="snote">참가자가 실시간으로 겨루며 보는 점수 · 여러 제출 중 최고점 자동 선택.</p>
+        </div>
+        <div class="scol">
+          <div class="sk">토탈 점수 · 최종·수상</div>
+          <div class="si">
+            <div class="it"><span><b>리더보드 점수</b><small>위 두 항목</small></span></div>
+            <div class="it"><span><b>온라인 수강률</b><small>VOD 3개 각 30%↑</small></span></div>
+            <div class="it"><span><b>제출형식 준수</b><small>출력 계약</small></span></div>
+            <div class="it"><span><b>보안 적합성</b><small>개인정보 · 금지어</small></span></div>
+          </div>
+          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 미송 확인 필요.</b></p>
+        </div>
       </div>
-      <div class="lg">
-        <div class="r"><span class="sw" style="background:var(--blue)"></span><span>과제 수행 <small>정확도 40.5 + 간결성 4.5</small></span><span class="pv">45</span></div>
-        <div class="r"><span class="sw" style="background:#3f6293"></span><span>온라인 수강률 <small>VOD 3개 각 30%↑</small></span><span class="pv">25</span></div>
-        <div class="r"><span class="sw" style="background:#6b86ac"></span><span>결과값 유효성 <small>답변 파싱·허용값</small></span><span class="pv">10</span></div>
-        <div class="r"><span class="sw" style="background:#9fb2ca"></span><span>제출형식 준수 <small>출력 계약 준수</small></span><span class="pv">10</span></div>
-        <div class="r"><span class="sw" style="background:#cad4e1"></span><span>보안 적합성 <small>개인정보·금지어</small></span><span class="pv">10</span></div>
-      </div>
-      <p class="note">정확도가 0.9 가중 → 오답은 자동으로 저득점, 별도 게이트 불필요.</p>
+      <div class="warn"><span class="wk">배점 결정 필요</span>정확한 점수 배분은 <b>대회 의도</b>(LLM 활용 능력 향상 vs 다양한 경험)와 <b>문제 수</b>(1 vs 4)에 따라 달라집니다.<br>참고 — <b>IITP 공식</b> 예측 40·신뢰 25·활용 20·문제해결 10·규격 5<br><b>DACON 롯데</b> 최고값·단일 가중.</div>
+      <div class="warn"><span class="wk">권장(leaning)</span>프롬프트 효율성은 결과 성능이 일정 수준 이상일 때만 <b>보조 지표</b>(동점 처리 또는 소배점 5~10점)로 반영.<br>무조건 짧게 써서 성능이 낮아지는 역효과를 막기 위해 <b>결과값 유효성을 1차 기준</b>으로 둡니다.</div>
     </div>
 
     <div class="mcard">
-      <div class="mtitle">① 정확도 · Macro F1</div>
+      <div class="mtitle">① 결과값 유효성 · Macro F1</div>
       <div class="mbody">
         <div class="eq"><div class="eqin">F1<sub>c</sub>   = 2·P<sub>c</sub>·R<sub>c</sub> / (P<sub>c</sub> + R<sub>c</sub>)
 MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
@@ -343,32 +413,20 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
           <li><span class="dt">재현율 R</span><span>실제 A 중 모델이 A로 맞힌 비율</span></li>
           <li><span class="dt">F1</span><span>정밀도·재현율을 합친 값 (조화평균)</span></li>
           <li><span class="dt">Macro F1</span><span>등급마다 F1을 구해 평균 — 드문 등급도 공평</span></li>
-          <li><span class="dt">평균 F1</span><span>두 라벨(위험·주기) F1의 평균 → 정확도</span></li>
+          <li><span class="dt">평균 F1</span><span>두 라벨(위험·주기) F1의 평균 → 예측 정확성</span></li>
         </ul>
       </div>
     </div>
     <div class="mcard">
-      <div class="mtitle">② 간결성 · 행동 지침 글자 수 L</div>
+      <div class="mtitle">② 프롬프트 효율성 · 글자/토큰 수 <span class="tbd">계산식 잠정</span></div>
       <div class="mbody">
-        <div class="eq"><div class="eqin"><span class="lhs">간결성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
-단, C_min = 200,  C_max = 3000</div></div>
+        <div class="eq"><div class="eqin"><span class="lhs">효율성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
+단, 상한·계수는 잠정 (미송 확정)</div></div>
         <ul class="defn">
-          <li><span class="dt">L</span><span>행동 지침 글자 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
-          <li><span class="dt">200자 이하</span><span>1점 (만점)</span></li>
-          <li><span class="dt">3000자</span><span>0점 (하드 캡)</span></li>
-          <li><span class="dt">의미</span><span>좋은 지침일수록 군더더기가 적다는 가정</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mcard">
-      <div class="mtitle">③ 통합 · 총점 (90/10 가중)</div>
-      <div class="mbody">
-        <div class="eq"><div class="eqin"><span class="lhs">과제수행</span> = 45 · ( <span class="w">0.9</span>·평균F1 + <span class="w">0.1</span>·간결성 )
-<span class="lhs">총점</span>     = 과제수행 + 25·VOD + 10·유효 + 10·형식 + 10·보안</div></div>
-        <ul class="defn">
-          <li><span class="dt">과제수행</span><span>정답 90% + 간결성 10% → 45점</span></li>
-          <li><span class="dt">＋ 나머지</span><span>수강률 25 · 유효 10 · 형식 10 · 보안 10</span></li>
-          <li><span class="dt">핵심</span><span>정답이 압도적 비중이라 오답은 자동으로 하위권</span></li>
+          <li><span class="dt">L</span><span>지침 글자·토큰 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
+          <li><span class="dt">방향</span><span>같은 수준의 결과 성능이라면 <b>더 간결한 프롬프트</b>에 보조 점수 (롯데 관례)</span></li>
+          <li><span class="dt">하드 캡</span><span>3000자 초과 시 제출 반려 (payload·비용)</span></li>
+          <li><span class="dt">잠정</span><span>정확한 계산식·상한은 대회 의도에 맞춰 확정</span></li>
         </ul>
       </div>
     </div>
@@ -377,7 +435,7 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
   <!-- 제출 콘솔 -->
   <section>
     <div class="shead"><span class="slabel">참가자 대시보드</span><h2>참가자 제출·검증 환경</h2>
-      <p class="lead">코딩 테스트처럼 <b>행동 지침</b>을 작성해 <b>[샘플 실행]</b>(공개 train)으로 검증하고 <b>[제출]</b>합니다 · 실행 50회 / 제출 3회 (1일).</p>
+      <p class="lead">코딩 테스트처럼 <b>행동 지침</b>을 작성해 <b>[샘플 실행]</b>(공개 샘플)으로 검증·<b>[제출]</b> · 1일 <span style="white-space:nowrap">샘플 50회</span> / <span style="white-space:nowrap">제출 3회</span>.<br><b>모바일 우선</b> · 작업은 <b>세션 지속</b>(중단·재개, 콘솔을 닫아도 서버 저장·백그라운드 진행).</p>
     </div>
     <div class="ide">
       <div class="ide-bar">
@@ -404,7 +462,7 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
         <span class="btn-submit">제출 →</span>
       </div>
       <div class="ide-results">
-        <div class="res-head">샘플 테스트 · 공개 train 5행 <span class="n">(공식 채점 아님)</span></div>
+        <div class="res-head">샘플 테스트 · 공개 샘플 데이터 5행 <span class="n">(공식 채점 아님)</span></div>
         <div class="scroll">
           <table>
             <thead><tr><th>#</th><th>입력 (요약)</th><th>기대 정답</th><th>에이전트 출력</th><th>판정</th></tr></thead>
@@ -417,38 +475,49 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
             </tbody>
           </table>
         </div>
-        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 test 채점과 다를 수 있음</span></div>
+        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 비공개 데이터 채점과 다를 수 있음</span></div>
       </div>
     </div>
-    <p class="note">[샘플 실행]은 정답이 공개된 train으로 즉시 결과를 보여주고, [제출]만 숨겨진 test 30행으로 공식 채점됩니다.</p>
+    <p class="note">[샘플 실행]은 정답이 공개된 샘플 데이터로 즉시 결과를 보여주고, [제출]만 숨겨진 비공개 데이터 30행으로 공식 채점됩니다.</p>
+    <p class="note"><b>제출 내역</b> — 공식 제출별 <b>상태·제출 시각·점수·파싱 성공 여부·리더보드 반영</b>을 확인합니다. 상태: 채점 대기 · 채점 중 · 채점 완료 · 검토 필요 · 실패.</p>
+    <div class="warn"><span class="wk">참가 환경</span>사지방(PC) 대신 <b>핸드폰</b> 위주 · 갑작스런 중단 대비 <b>세션 지속·백그라운드 저장</b> 필수.<br>초급 친화를 위해 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>를 쓰게 하는 <b>가이드형 다단계</b>(Shape B)도 검토 중 — <b>열린 결정 ④</b>.</div>
+    <div class="card" style="margin-top:16px">
+      <p class="cap">LLM 질문 도우미 <span class="tbd">선택 · 검토 중</span></p>
+      <p class="labdesc" style="margin:8px 0 0">VOD 개념·데이터 컬럼 의미·프롬프트 작성 방향을 질문할 수 있습니다. 단, 문제 <b>정답을 직접 요구</b>하거나 <b>비공개 데이터 예측을 대신 시키는</b> 질문은 차단합니다(사용 로그·토큰 기록). 챗봇 탑재 시 서비스 범위·비용·필터링 정책이 달라지므로 개발 범위 결정 필요.<br><b>학습·이해를 돕는 기능이며 공식 채점에 직접 관여하지 않습니다.</b> 사용 로그는 운영·보안 목적으로 저장하고, <b>실제 군사정보·개인정보 입력은 금지</b>합니다.</p>
+      <div class="adlist">
+        <div class="a"><span class="mk">허용</span><span>"Macro F1이 무엇인가요?" · "정비횟수·가동시간은 어떤 의미인가요?" · "출력 형식을 지키려면 어떻게 쓰나요?"</span></div>
+        <div class="d"><span class="mk">제한</span><span>"이 문제 정답 프롬프트를 써줘" · "비공개 데이터에서 HIGH 나올 조건 알려줘" · "내 점수 최대화 프롬프트 대신 만들어줘"</span></div>
+      </div>
+    </div>
   </section>
 
   <!-- 리더보드 -->
   <section>
     <div class="shead"><span class="slabel">리더보드</span><h2>리더보드 운영 및 순위 산정</h2>
-      <p class="lead">참가자는 자기 순위와 <b>상위 몇 %</b>인지 분포와 함께 확인합니다. 실시간이 아닌 <b>매일 자정 배치</b>로 갱신합니다.</p>
+      <p class="lead">리더보드는 <b>리더보드 점수</b>(결과값 유효성 · 프롬프트 효율성)로 겨룹니다. 제출 후 <b>통상 수 분 내(최대 15분)</b> 반영하고, <b>토탈 점수·최종 순위</b>는 별도 공지합니다.</p>
     </div>
     <div class="lbwrap">
       <div class="card tablecard">
-        <p class="cap">리더보드 (예시 · 자정 스냅샷)</p>
+        <p class="cap">리더보드 (예시 · 리더보드 점수)</p>
         <div class="scroll">
           <table class="lb">
-            <thead><tr><th>순위</th><th>참가자</th><th>소속</th><th>총점</th><th>제출</th><th>최종 제출</th></tr></thead>
+            <thead><tr><th>순위</th><th>참가자</th><th>소속</th><th>점수</th><th>누적 제출</th><th>최종 제출</th></tr></thead>
             <tbody>
-              <tr><td class="rk top">1</td><td>이○준</td><td>공군 제1전투비행단</td><td class="sc">97.2</td><td class="sub2">3/3</td><td class="sub2">07-28 22:10</td></tr>
-              <tr><td class="rk top">2</td><td>박○서</td><td>수도방위사령부</td><td class="sc">95.8</td><td class="sub2">3/3</td><td class="sub2">07-27 19:44</td></tr>
-              <tr><td class="rk top">3</td><td>최○민</td><td>해군 제2함대</td><td class="sc">94.1</td><td class="sub2">2/3</td><td class="sub2">07-28 09:03</td></tr>
+              <tr><td class="rk top">1</td><td>이○준</td><td>공군 제1전투비행단</td><td class="sc">97.2</td><td class="sub2">18회</td><td class="sub2">07-28 22:10</td></tr>
+              <tr><td class="rk top">2</td><td>박○서</td><td>수도방위사령부</td><td class="sc">95.8</td><td class="sub2">22회</td><td class="sub2">07-27 19:44</td></tr>
+              <tr><td class="rk top">3</td><td>최○민</td><td>해군 제2함대</td><td class="sc">94.1</td><td class="sub2">11회</td><td class="sub2">07-28 09:03</td></tr>
               <tr class="gap"><td colspan="6">⋯</td></tr>
-              <tr class="me"><td class="rk">1,187</td><td>홍길동 <span class="me-badge">본인</span></td><td>육군훈련소</td><td class="sc">91.3</td><td class="sub2">3/3</td><td class="sub2">07-28 14:22</td></tr>
-              <tr><td class="rk">1,188</td><td>정○우</td><td>제7군단</td><td class="sc">91.2</td><td class="sub2">2/3</td><td class="sub2">07-28 11:57</td></tr>
+              <tr class="me"><td class="rk">1,187</td><td>홍길동 <span class="me-badge">본인</span></td><td>육군훈련소</td><td class="sc">91.3</td><td class="sub2">14회</td><td class="sub2">07-28 14:22</td></tr>
+              <tr><td class="rk">1,188</td><td>정○우</td><td>제7군단</td><td class="sc">91.2</td><td class="sub2">7회</td><td class="sub2">07-28 11:57</td></tr>
             </tbody>
           </table>
         </div>
         <div class="lbnote">
-          <div class="ln"><span class="lk">마스킹</span> 참가자명 일부 가림</div>
-          <div class="ln"><span class="lk">총점</span> 여러 제출 중 최고점 자동 선택</div>
-          <div class="ln"><span class="lk">동점</span> 수강률 → 제출시간 → 유효성 순</div>
-          <div class="ln"><span class="lk">소속</span> 공개 여부 토글</div>
+          <div class="ln"><span class="lk">리더보드 점수</span> 결과값 유효성 + 프롬프트 효율성 · 최고점 자동 선택</div>
+          <div class="ln"><span class="lk">토탈 점수</span> + 수강·형식·보안 → 최종·수상 (별도 공지)</div>
+          <div class="ln"><span class="lk">동점</span> 예측 성능 → Private → 프롬프트 효율성 또는 최초 제출 <span class="dim">(최종 기준은 배점 확정 시)</span></div>
+          <div class="ln"><span class="lk">누적 제출</span> 1일 최대 3회 · 대회 기간 누적 제출 수 표시</div>
+          <div class="ln"><span class="lk">마스킹</span> 참가자명 일부 가림 · 소속 공개 토글</div>
         </div>
       </div>
       <div class="card mypos">
@@ -467,9 +536,102 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
     </div>
     <div class="phases">
       <div class="phase" data-s="1"><span class="pw">대회 초반</span><h4>구간만 표시</h4><p>상위·중위·하위 n%로만 노출해 초기 과열·이탈을 방지합니다.</p></div>
-      <div class="phase" data-s="2"><span class="pw">진행 중</span><h4>매일 자정 갱신</h4><p>실시간이 아닌 자정 배치로 순위를 갱신해 역추적을 차단합니다.</p></div>
+      <div class="phase" data-s="2"><span class="pw">진행 중</span><h4>제출 후 수 분 내 반영</h4><p>접수 확인 → 백그라운드 채점 → 수 분 내 리더보드 반영. 역추적은 구간·지연 노출로 완화(군 취침시간 고려).</p></div>
       <div class="phase" data-s="3"><span class="pw">마지막 날</span><h4>실제 등수 공개</h4><p>Public 기준 실등수를 열어 최종 스퍼트 동기를 부여합니다.</p></div>
       <div class="phase" data-s="4"><span class="pw">마감 후</span><h4>Private 최종 순위</h4><p>숨겨둔 정답셋으로 재채점 → 게이밍 무력화, 수상 후보 확정.</p></div>
+    </div>
+  </section>
+
+  <!-- 시스템 아키텍처 -->
+  <section>
+    <div class="shead"><span class="slabel">시스템 아키텍처</span><h2>시스템 아키텍처 (레이어)</h2>
+      <p class="lead"><b>제출 접수(웹)</b>와 <b>채점 재실행(워커)</b>을 분리한 <b>비동기 구조</b> — 마감 폭주에도 접수는 즉시, 무거운 LLM 재실행은 큐·워커가 완충합니다.</p>
+    </div>
+    <div class="card">
+      <div class="archsvg-wrap">
+<svg id="archsvg" width="100%" xmlns="http://www.w3.org/2000/svg" class="flowchart" style="max-width: 820.093994140625px;" viewBox="0 0 820.093994140625 925.7118530273438" role="graphics-document document" aria-roledescription="flowchart-v2"><style>#archsvg{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:13px;fill:#191f28;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#archsvg .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#archsvg .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#archsvg .error-icon{fill:hsl(36, 41.6666666667%, 100%);}#archsvg .error-text{fill:#000000;stroke:#000000;}#archsvg .edge-thickness-normal{stroke-width:1px;}#archsvg .edge-thickness-thick{stroke-width:3.5px;}#archsvg .edge-pattern-solid{stroke-dasharray:0;}#archsvg .edge-thickness-invisible{stroke-width:0;fill:none;}#archsvg .edge-pattern-dashed{stroke-dasharray:3;}#archsvg .edge-pattern-dotted{stroke-dasharray:2;}#archsvg .marker{fill:#8195ad;stroke:#8195ad;}#archsvg .marker.cross{stroke:#8195ad;}#archsvg svg{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:13px;}#archsvg p{margin:0;}#archsvg .label{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#191f28;}#archsvg .cluster-label text{fill:#000000;}#archsvg .cluster-label span{color:#000000;}#archsvg .cluster-label span p{background-color:transparent;}#archsvg .label text,#archsvg span{fill:#191f28;color:#191f28;}#archsvg .node rect,#archsvg .node circle,#archsvg .node ellipse,#archsvg .node polygon,#archsvg .node path{fill:#eef2f8;stroke:#1c4270;stroke-width:1px;}#archsvg .rough-node .label text,#archsvg .node .label text,#archsvg .image-shape .label,#archsvg .icon-shape .label{text-anchor:middle;}#archsvg .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#archsvg .rough-node .label,#archsvg .node .label,#archsvg .image-shape .label,#archsvg .icon-shape .label{text-align:center;}#archsvg .node.clickable{cursor:pointer;}#archsvg .root .anchor path{fill:#8195ad!important;stroke-width:0;stroke:#8195ad;}#archsvg .arrowheadPath{fill:#0b0b0b;}#archsvg .edgePath .path{stroke:#8195ad;stroke-width:1px;}#archsvg .flowchart-link{stroke:#8195ad;fill:none;}#archsvg .edgeLabel{background-color:hsl(96, 41.6666666667%, 95.2941176471%);text-align:center;}#archsvg .edgeLabel p{background-color:hsl(96, 41.6666666667%, 95.2941176471%);}#archsvg .edgeLabel rect{opacity:0.5;background-color:hsl(96, 41.6666666667%, 95.2941176471%);fill:hsl(96, 41.6666666667%, 95.2941176471%);}#archsvg .labelBkg{background-color:rgba(242.0000000001, 248.0000000001, 238.0000000001, 0.5);}#archsvg .cluster rect{fill:hsl(36, 41.6666666667%, 100%);stroke:hsl(36, 1.6666666667%, 90%);stroke-width:1px;}#archsvg .cluster text{fill:#000000;}#archsvg .cluster span{color:#000000;}#archsvg div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:12px;background:hsl(36, 41.6666666667%, 100%);border:1px solid hsl(36, 1.6666666667%, 90%);border-radius:2px;pointer-events:none;z-index:100;}#archsvg .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#191f28;}#archsvg rect.text{fill:none;stroke-width:0;}#archsvg .icon-shape,#archsvg .image-shape{background-color:hsl(96, 41.6666666667%, 95.2941176471%);text-align:center;}#archsvg .icon-shape p,#archsvg .image-shape p{background-color:hsl(96, 41.6666666667%, 95.2941176471%);padding:2px;}#archsvg .icon-shape .label rect,#archsvg .image-shape .label rect{opacity:0.5;background-color:hsl(96, 41.6666666667%, 95.2941176471%);fill:hsl(96, 41.6666666667%, 95.2941176471%);}#archsvg .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#archsvg .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#archsvg .node .neo-node{stroke:#1c4270;}#archsvg [data-look="neo"].node rect,#archsvg [data-look="neo"].cluster rect,#archsvg [data-look="neo"].node polygon{stroke:url(#archsvg-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#archsvg [data-look="neo"].swimlane.cluster rect{filter:none;}#archsvg [data-look="neo"].node path{stroke:url(#archsvg-gradient);stroke-width:1px;}#archsvg [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#archsvg [data-look="neo"].node .neo-line path{stroke:#1c4270;filter:none;}#archsvg [data-look="neo"].node circle{stroke:url(#archsvg-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#archsvg [data-look="neo"].node circle .state-start{fill:#000000;}#archsvg [data-look="neo"].icon-shape .icon{fill:url(#archsvg-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#archsvg [data-look="neo"].icon-shape .icon-neo path{stroke:url(#archsvg-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#archsvg :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker id="archsvg_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="archsvg_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="archsvg_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto"><path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path></marker><marker id="archsvg_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto"><polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon></marker><marker id="archsvg_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="archsvg_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="archsvg_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="archsvg_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle></marker><marker id="archsvg_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="archsvg_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="archsvg_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path></marker><marker id="archsvg_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M600.828,77L600.828,82.792C600.828,88.583,600.828,100.167,600.828,111.083C600.828,122,600.828,132.25,600.828,137.375L600.828,142.5" id="archsvg-L_P_FE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_P_FE_0" data-points="W3sieCI6NjAwLjgyODEyNSwieSI6Nzd9LHsieCI6NjAwLjgyODEyNSwieSI6MTExLjc1fSx7IngiOjYwMC44MjgxMjUsInkiOjE0Ni41fV0=" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M501.766,208.9L483.065,214.166C464.365,219.433,426.964,229.967,408.263,238.733C389.563,247.5,389.563,254.5,389.563,258L389.563,261.5" id="archsvg-L_FE_API_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_FE_API_0" data-points="W3sieCI6NTAxLjc2NTYyNSwieSI6MjA4Ljg5OTU2MzY0MTc0MjQ3fSx7IngiOjM4OS41NjI1LCJ5IjoyNDAuNX0seyJ4IjozODkuNTYyNSwieSI6MjY1LjV9XQ==" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M502.536,334.5L521.501,340.292C540.467,346.083,578.397,357.667,597.363,368.583C616.328,379.5,616.328,389.75,616.328,394.875L616.328,400" id="archsvg-L_API_Q_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_API_Q_0" data-points="W3sieCI6NTAyLjUzNTk4ODI2NzE0OCwieSI6MzM0LjV9LHsieCI6NjE2LjMyODEyNSwieSI6MzY5LjI1fSx7IngiOjYxNi4zMjgxMjUsInkiOjQwNH1d" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M616.328,492.5L616.328,496.667C616.328,500.833,616.328,509.167,616.328,516.833C616.328,524.5,616.328,531.5,616.328,535L616.328,538.5" id="archsvg-L_Q_W_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_Q_W_0" data-points="W3sieCI6NjE2LjMyODEyNSwieSI6NDkyLjV9LHsieCI6NjE2LjMyODEyNSwieSI6NTE3LjV9LHsieCI6NjE2LjMyODEyNSwieSI6NTQyLjV9XQ==" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M482.38,608.46L423.467,618.008C364.555,627.557,246.731,646.653,187.818,662.136C128.906,677.619,128.906,689.487,128.906,695.422L128.906,701.356" id="archsvg-L_W_LLM_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_LLM_0" data-points="W3sieCI6NDg2LjMyODEyNSwieSI6NjA3LjgyMDA0MzI3NjE2NjF9LHsieCI6MTI4LjkwNjI1LCJ5Ijo2NjUuNzV9LHsieCI6MTI4LjkwNjI1LCJ5Ijo3MDUuMzU1OTExMjU0ODgyOH1d" data-look="classic" marker-start="url(#archsvg_flowchart-v2-pointStart)" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M333.819,334.5L324.461,340.292C315.103,346.083,296.388,357.667,287.03,376.625C277.672,395.583,277.672,421.917,277.672,446.625C277.672,471.333,277.672,494.417,277.672,517.5C277.672,540.583,277.672,563.667,277.672,588.375C277.672,613.083,277.672,639.417,284.892,658.721C292.112,678.025,306.552,690.3,313.772,696.438L320.992,702.575" id="archsvg-L_API_D_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_API_D_0" data-points="W3sieCI6MzMzLjgxOTE1NjEzNzE4NDEsInkiOjMzNC41fSx7IngiOjI3Ny42NzE4NzUsInkiOjM2OS4yNX0seyJ4IjoyNzcuNjcxODc1LCJ5Ijo0NDguMjV9LHsieCI6Mjc3LjY3MTg3NSwieSI6NTE3LjV9LHsieCI6Mjc3LjY3MTg3NSwieSI6NTg2Ljc1fSx7IngiOjI3Ny42NzE4NzUsInkiOjY2NS43NX0seyJ4IjozMjQuMDM5NDk3Mjc2ODgwMywieSI6NzA1LjE2NjA5MTQyOTQyNTl9XQ==" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M552.819,631L544.507,636.792C536.195,642.583,519.57,654.167,503.937,666.124C488.303,678.082,473.661,690.413,466.34,696.579L459.019,702.745" id="archsvg-L_W_D_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_D_0" data-points="W3sieCI6NTUyLjgxOTM5Nzc0NTI1MzEsInkiOjYzMX0seyJ4Ijo1MDIuOTQ1MzEyNSwieSI6NjY1Ljc1fSx7IngiOjQ1NS45NTkzMjU3NTkwMTY3LCJ5Ijo3MDUuMzIxNjAwMDUzMTc4NX1d" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M636.983,631L639.686,636.792C642.39,642.583,647.796,654.167,650.5,667.518C653.203,680.869,653.203,695.987,653.203,703.547L653.203,711.106" id="archsvg-L_W_GT_0" class=" edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_W_GT_0" data-points="W3sieCI6NjM2Ljk4Mjc5MjcyMTUxOSwieSI6NjMxfSx7IngiOjY1My4yMDMxMjUsInkiOjY2NS43NX0seyJ4Ijo2NTMuMjAzMTI1LCJ5Ijo3MTUuMTA1OTExMjU0ODgyOH1d" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M389.563,798.712L389.563,802.878C389.563,807.045,389.563,815.378,404.248,823.681C418.933,831.984,448.303,840.255,462.988,844.391L477.673,848.527" id="archsvg-L_D_LB_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_D_LB_0" data-points="W3sieCI6Mzg5LjU2MjUsInkiOjc5OC43MTE4MjI1MDk3NjU2fSx7IngiOjM4OS41NjI1LCJ5Ijo4MjMuNzExODIyNTA5NzY1Nn0seyJ4Ijo0ODEuNTIzNDM3NSwieSI6ODQ5LjYxMTMzMDY4MjIzODF9XQ==" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path><path d="M720.133,849.611L735.46,845.295C750.786,840.978,781.44,832.345,796.767,815.677C812.094,799.01,812.094,774.308,812.094,747.981C812.094,721.654,812.094,693.702,812.094,666.559C812.094,639.417,812.094,613.083,812.094,588.375C812.094,563.667,812.094,540.583,812.094,517.5C812.094,494.417,812.094,471.333,812.094,446.625C812.094,421.917,812.094,395.583,812.094,370.875C812.094,346.167,812.094,323.083,812.094,301.625C812.094,280.167,812.094,260.333,794.035,245.331C775.976,230.328,739.858,220.156,721.8,215.07L703.741,209.984" id="archsvg-L_LB_FE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_LB_FE_0" data-points="W3sieCI6NzIwLjEzMjgxMjUsInkiOjg0OS42MTEzMzA2ODIyMzgxfSx7IngiOjgxMi4wOTM3NSwieSI6ODIzLjcxMTgyMjUwOTc2NTZ9LHsieCI6ODEyLjA5Mzc1LCJ5Ijo3NDkuNjA1OTExMjU0ODgyOH0seyJ4Ijo4MTIuMDkzNzUsInkiOjY2NS43NX0seyJ4Ijo4MTIuMDkzNzUsInkiOjU4Ni43NX0seyJ4Ijo4MTIuMDkzNzUsInkiOjUxNy41fSx7IngiOjgxMi4wOTM3NSwieSI6NDQ4LjI1fSx7IngiOjgxMi4wOTM3NSwieSI6MzY5LjI1fSx7IngiOjgxMi4wOTM3NSwieSI6MzAwfSx7IngiOjgxMi4wOTM3NSwieSI6MjQwLjV9LHsieCI6Njk5Ljg5MDYyNSwieSI6MjA4Ljg5OTU2MzY0MTc0MjQ3fV0=" data-look="classic" marker-end="url(#archsvg_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(600.828125, 111.75)"><g class="label" data-id="L_P_FE_0" transform="translate(-21.1484375, -9.75)"><foreignObject width="42.296875" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>HTTPS</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_FE_API_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(616.328125, 369.25)"><g class="label" data-id="L_API_Q_0" transform="translate(-26.21875, -9.75)"><foreignObject width="52.4375" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>enqueue</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_Q_W_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(128.90625, 665.75)"><g class="label" data-id="L_W_LLM_0" transform="translate(-16.875, -9.75)"><foreignObject width="33.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>재실행</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_API_D_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_W_D_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel" transform="translate(653.203125, 665.75)"><g class="label" data-id="L_W_GT_0" transform="translate(-16.875, -9.75)"><foreignObject width="33.75" height="19.5"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "><p>워커만</p></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_D_LB_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g><g class="edgeLabel"><g class="label" data-id="L_LB_FE_0" transform="translate(0, 0)"><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" class="labelBkg" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="edgeLabel "></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default  " id="archsvg-flowchart-P-0" data-look="classic" transform="translate(600.828125, 42.5)"><rect class="basic label-container" style="" x="-115.34375" y="-34.5" width="230.6875" height="69"></rect><g class="label" style="" transform="translate(-85.34375, -19.5)"><rect></rect><foreignObject width="170.6875" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>참가자 · 모바일 우선<br/>세션 지속 (중단·재개·백그라운드)</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-FE-1" data-look="classic" transform="translate(600.828125, 181)"><rect class="basic label-container" style="" x="-99.0625" y="-34.5" width="198.125" height="69"></rect><g class="label" style="" transform="translate(-69.0625, -19.5)"><rect></rect><foreignObject width="138.125" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Frontend (SPA)<br/>안내·신청 · 콘솔 · 리더보드</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-API-2" data-look="classic" transform="translate(389.5625, 300)"><rect class="basic label-container" style="" x="-126.1875" y="-34.5" width="252.375" height="69"></rect><g class="label" style="" transform="translate(-96.1875, -19.5)"><rect></rect><foreignObject width="192.375" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>API · 무상태 수평 확장<br/>인증 · 접수(동기 검증) · 조회 · 관리자</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-Q-3" data-look="classic" transform="translate(616.328125, 448.25)"><rect class="basic label-container" style="" x="-130" y="-44.25" width="260" height="88.5"></rect><g class="label" style="" transform="translate(-100, -29.25)"><rect></rect><foreignObject width="200" height="58.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Queue (Redis)<br/>채점 큐 · 제출 카운터 · rate limit · 캐시</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-W-4" data-look="classic" transform="translate(616.328125, 586.75)"><rect class="basic label-container" style="" x="-130" y="-44.25" width="260" height="88.5"></rect><g class="label" style="" transform="translate(-100, -29.25)"><rect></rect><foreignObject width="200" height="58.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table; white-space: break-spaces; line-height: 1.5; max-width: 200px; text-align: center; width: 200px;"><span class="nodeLabel "><p>Scoring Workers<br/>하네스 재실행 · 파싱 · 지표 산정 · 예산 가드</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-LLM-5" data-look="classic" transform="translate(128.90625, 749.6059112548828)"><rect class="basic label-container" style="" x="-120.90625" y="-44.25" width="241.8125" height="88.5"></rect><g class="label" style="" transform="translate(-90.90625, -29.25)"><rect></rect><foreignObject width="181.8125" height="58.5"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>LLM API<br/>경량 모델 우선 검토<br/>예: gpt-4.1-nano · gpt-4o-mini</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-D-6" data-look="classic" transform="translate(389.5625, 749.6059112548828)"><path d="M0,14.737274220032841 a89.75,14.737274220032841 0,0,0 179.5,0 a89.75,14.737274220032841 0,0,0 -179.5,0 l0,68.73727422003284 a89.75,14.737274220032841 0,0,0 179.5,0 l0,-68.73727422003284" class="basic label-container outer-path" style="" label-offset-y="14.737274220032841" transform="translate(-89.75, -49.10591133004927)"></path><g class="label" style="" transform="translate(-82.25, -9.5)"><rect></rect><foreignObject width="164.5" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>Data<br/>DB · Redis · Object Storage</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-GT-7" data-look="classic" transform="translate(653.203125, 749.6059112548828)"><rect class="basic label-container" style="" x="-123.890625" y="-34.5" width="247.78125" height="69"></rect><g class="label" style="" transform="translate(-93.890625, -19.5)"><rect></rect><foreignObject width="187.78125" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>격리 저장소<br/>ground_truth · API 키 (워커 전용)</p></span></div></foreignObject></g></g><g class="node default  " id="archsvg-flowchart-LB-8" data-look="classic" transform="translate(600.828125, 883.2118225097656)"><rect class="basic label-container" style="" x="-119.3046875" y="-34.5" width="238.609375" height="69"></rect><g class="label" style="" transform="translate(-89.3046875, -19.5)"><rect></rect><foreignObject width="178.609375" height="39"><div xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;"><span class="nodeLabel "><p>리더보드<br/>제출 후 수 분 내 반영 · 단계적 공개</p></span></div></foreignObject></g></g></g></g></g><defs><filter id="archsvg-drop-shadow" height="130%" width="130%"><feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><defs><filter id="archsvg-drop-shadow-small" height="150%" width="150%"><feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="#000000"></feDropShadow></filter></defs><linearGradient id="archsvg-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1c4270" stop-opacity="1"></stop><stop offset="100%" stop-color="hsl(96, 1.6666666667%, 85.2941176471%)" stop-opacity="1"></stop></linearGradient></svg>
+      </div>
+      <div class="lbnote archnote">
+        <div class="ln"><span class="lk">접수 ↔ 채점</span>제출은 동기 검증(스키마·3000자·1일 횟수) 통과 시 <b>즉시 접수</b> · 실제 재실행 채점은 <b>비동기 큐·워커</b> → 웹 tier 무상태·수평 확장</div>
+        <div class="ln"><span class="lk">재실행</span>워커가 참가자 지침을 <b>LLM에 재실행</b>(비공개 데이터) → 파싱 → 지표 산정 · <b>예산 가드</b>로 호출 비용 통제</div>
+        <div class="ln"><span class="lk">격리</span>정답셋·API 키는 <b>워커 전용</b> 저장소만 접근 · 웹·프론트 미노출 → 하드코딩·정답 유출 차단</div>
+        <div class="ln"><span class="lk">재현·감사</span>재실행 <b>원출력</b>을 Object Storage에 저장 → 재채점 동일성·이의 대응</div>
+        <div class="ln"><span class="lk">리더보드</span>제출 후 <b>수 분 내</b> 반영 + 단계적 공개(구간 → 등수 → Private 최종)</div>
+      </div>
+      <p class="note"><b>스택 비강제:</b> 표기된 기술(React·FastAPI·Redis 등)은 <b>권장 예시</b>일 뿐, 개발팀 <b>기존 스택</b>으로 구현해도 됩니다 — 우리는 아키텍처만 제공합니다. 예상 동시 접속 500명 수준에서는 일반 웹 서버보다 <b>LLM 호출량·채점 큐 대기 시간</b>이 주요 병목이 될 가능성이 높습니다. 그래서 제출 접수와 채점 실행을 분리하고 큐·워커·배치로 완충합니다.</p>
+    </div>
+  </section>
+
+  <!-- 운영 · 관리자 · 비용 -->
+  <section>
+    <div class="shead"><span class="slabel">운영 · 비용</span><h2>관리자 기능 및 비용 산정</h2>
+      <p class="lead">운영자가 신청·수강·제출·채점·수상을 한 화면에서 관리하고, 대규모 LLM 호출 비용을 통제합니다.</p>
+    </div>
+    <div class="card">
+      <p class="cap">관리자 · 운영 기능</p>
+      <div class="lbnote archnote">
+        <div class="ln"><span class="lk">참가자·제출</span>참가자 목록(소속·수강률·제출·점수) · 제출 내역(프롬프트·모델 원출력·파싱·점수) 조회</div>
+        <div class="ln"><span class="lk">재채점</span>개별/전체 일괄 재채점 · 모델·기준 변경 시 재산정</div>
+        <div class="ln"><span class="lk">리더보드</span>공개/비공개·구간/등수 전환 · 특정 제출 제외</div>
+        <div class="ln"><span class="lk">이상 탐지</span>금지어·개인정보·<b>군사정보</b> · 유사/반복 프롬프트 · 부정 제출</div>
+        <div class="ln"><span class="lk">운영 로그</span>API 호출량·토큰·실패율·큐 대기·채점 오류</div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">비용 · 호출량 예시 <span class="tbd">모델 단가 변동 시 재산정</span></p>
+      <div class="eq"><div class="eqin">공식 채점 최악 = 참가자 1만 × 1일 3회 × 비공개 30행
+             = <span class="w">최대 90만 호출/일</span></div></div>
+      <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
+        <div class="ln"><span class="lk">억제</span>공식 3회·미리보기 50회 상한 · 큐 기반 비동기 · 예산 초과 시 대기/차단</div>
+        <div class="ln"><span class="lk">배치</span>행당 1회 대신 <b>미니배치(5~10행)</b> 또는 30행 1회 JSON 배열 검토 — 비용↓, 출력형식 실패 리스크와 절충</div>
+        <div class="ln"><span class="lk">경량화</span>non-reasoning 소형 모델 · 프롬프트 캐싱(system 고정) · 동일 지침 중복 제거</div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">개발사 전달 핵심</p>
+      <p class="labdesc" style="margin:8px 0 0">단순 제출 게시판이 아니라, 참가자가 낸 <b>행동 지침 프롬프트를 서버가 동일 조건에서 재실행</b>하고 LLM 출력을 자동 파싱해 정답과 비교한 뒤 리더보드에 반영하는 <b>비동기 자동채점 시스템</b>입니다.</p>
+      <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
+        <div class="ln"><span class="lk">분리</span>웹 접수와 채점 워커를 분리(마감 폭주에도 접수 즉시 · 채점은 큐·워커)</div>
+        <div class="ln"><span class="lk">격리</span>비공개 데이터·ground_truth·API 키는 프론트/API에서 접근 불가(워커 전용)</div>
+        <div class="ln"><span class="lk">저장</span>제출 원문·LLM 원출력·파싱 결과·점수·score_version 모두 저장(재현·감사)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 열린 결정 · 미송 논의 -->
+  <section>
+    <div class="shead"><span class="slabel">열린 결정</span><h2>미송님 논의 · 결정 필요 항목</h2>
+      <p class="lead">아래는 <b>주최측·미송 확정이 필요한 항목</b>입니다. 나머지 설계(배점·콘솔·채점)는 이 결정에 맞춰 조정됩니다.</p>
+    </div>
+    <div class="dgrid">
+      <div class="dcard">
+        <span class="dn">① 대회 의도</span>
+        <h4>능력 향상 vs 다양한 경험</h4>
+        <p>LLM 활용 능력을 <b>겨루는 대회</b>인가, 다양한 주제를 <b>경험</b>시키는 장인가. 문제 수·채점·난이도가 여기서 갈립니다.</p>
+      </div>
+      <div class="dcard">
+        <span class="dn">② 문제 수 · 채점</span>
+        <h4>1문제 vs 4주제</h4>
+        <p>출제안은 4개(조달 수요예측·입영 수요예측·드론 탐지·정비주기). <b>전부/일부/1개</b> 중 무엇을 풀고, 점수는 <b>합·평균·최고점</b> 중 무엇인지.</p>
+        <p class="lean">leaning · 일부 선택 + 문제별 난이도 배점(참여 유도)</p>
+      </div>
+      <div class="dcard">
+        <span class="dn">③ 리더보드/토탈 배점</span>
+        <h4>분리 점수 세부 배분</h4>
+        <p>리더보드 = 결과값 유효성 + 프롬프트 효율성 / 토탈 = + 수강·형식·보안. <b>각 항목 정확 배점</b> 확정 필요.</p>
+      </div>
+      <div class="dcard">
+        <span class="dn">④ 제출 형태</span>
+        <h4>단일 지침 vs 가이드형 다단계</h4>
+        <p>프롬프트 <b>한 장</b>(Shape A)인지, 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>(전처리→분석→구조화, Shape B)를 쓰게 할지.</p>
+        <p class="lean">leaning · 초급 친화 가이드형 다단계(주최측 Data_Sample 구조)</p>
+      </div>
+      <div class="dcard flaw">
+        <span class="dn">⑤ 데이터 결함</span>
+        <h4>라벨이 LLM에 쉽게 추론됨</h4>
+        <p>현재 정답 규칙은 단순 임계식이라 <b>컬럼만 붙여넣으면 LLM이 즉답</b> → 변별력 붕괴. 함정/재설계 필요.</p>
+        <p class="lean">방향 · 비선형 · 특성 상호작용 · 노이즈 · 숨긴 임계</p>
+      </div>
     </div>
   </section>
 
@@ -477,7 +639,9 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
     <div class="fcol">
       <span class="fcol-k">설계 문서</span>
       <span class="doc"><b>기획</b>request/competition_design_brief.md</span>
-      <span class="doc"><b>명세</b>request/system_functional_spec.md</span>
+      <span class="doc"><b>기능 명세</b>request/system_functional_spec.md</span>
+      <span class="doc"><b>개발 아키텍처</b>request/dev_architecture_plan.md</span>
+      <span class="doc"><b>작업 지시서</b>request/dev_workplan_scoring_leaderboard.md</span>
       <span class="doc"><b>원본</b>docs/ (추진계획안·개발문서 PDF)</span>
       <span class="doc"><b>구축</b>데이원컴퍼니 플랫폼 개발팀</span>
     </div>

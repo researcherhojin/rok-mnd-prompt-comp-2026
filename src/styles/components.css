@@ -114,9 +114,51 @@
 
   /* footer */
   .foot{margin-top:60px;padding-top:26px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:26px 48px}
-  .fcol{display:flex;flex-direction:column;gap:9px} .fcol-k{font-size:12px;font-weight:700;color:var(--muted)}
-  .doc{font-size:13.5px;color:var(--sub);text-decoration:none;font-weight:500} .doc b{color:var(--ink);font-weight:700;margin-right:6px}
+  .fcol{display:flex;flex-direction:column;gap:9px;min-width:0} .fcol-k{font-size:12px;font-weight:700;color:var(--muted)}
+  .doc{font-size:13.5px;color:var(--sub);text-decoration:none;font-weight:500;overflow-wrap:anywhere} .doc b{color:var(--ink);font-weight:700;margin-right:6px}
   a.doc:hover{color:var(--blue)} a.doc::after{content:" ↗";color:var(--muted);font-size:11px}
+
+  /* top decision summary */
+  .summarycard{border-top:3px solid var(--blue)}
+  .qlist{margin:14px 0 0;padding:0;list-style:none;counter-reset:q;display:grid;gap:11px}
+  @media(min-width:760px){.qlist{grid-template-columns:1fr 1fr;column-gap:26px}}
+  .qlist li{counter-increment:q;position:relative;padding-left:34px;font-size:14.5px;color:var(--sub);line-height:1.55}
+  .qlist li b{color:var(--ink);font-weight:700}
+  .qlist li::before{content:counter(q);position:absolute;left:0;top:0;width:23px;height:23px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+  /* allow/deny examples (LLM helper) */
+  .adlist{display:grid;gap:8px;margin:10px 0 0} .adlist .a,.adlist .d{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5}
+  .adlist .mk{flex:none;font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px} .adlist .a .mk{color:var(--green);background:var(--green-soft)} .adlist .d .mk{color:var(--red);background:var(--red-soft)}
+
+  /* flags: 미정 배지 · 경고 콜아웃 */
+  .tbd{font-size:11px;font-weight:800;color:var(--amber);background:var(--amber-soft);padding:3px 9px;border-radius:999px;margin-left:8px;white-space:nowrap}
+  .warn{background:var(--amber-soft);border-radius:var(--r2);padding:16px 18px;margin-top:16px;font-size:14px;color:var(--ink);line-height:1.65}
+  .warn .wk{font-weight:800;color:var(--amber);margin-right:6px} .warn b{font-weight:800} .warn+.warn{margin-top:12px}
+
+  /* split scoring (리더보드 / 토탈) */
+  .split{display:grid;gap:16px} @media(min-width:760px){.split{grid-template-columns:1fr 1fr}}
+  .scol{background:var(--raise);border-radius:var(--r2);padding:18px 20px}
+  .scol.lead-col{background:var(--blue-soft)}
+  .scol .sk{display:flex;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:800;color:var(--blue-strong)}
+  .scol .si{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+  .scol .si .it{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--sub);border-bottom:1px solid var(--line);padding-bottom:9px} .scol .si .it:last-child{border-bottom:none;padding-bottom:0}
+  .scol .si .it b{color:var(--ink);font-weight:700} .scol .si .it small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:2px}
+  .scol .snote{margin:12px 0 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+
+  /* system architecture (프리렌더 SVG) */
+  .archsvg-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
+  .archsvg-wrap svg{height:auto;display:block;margin:0 auto}
+  .lbnote.archnote{grid-template-columns:1fr;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  .archnote .ln{align-items:flex-start} .archnote .lk{margin-top:1px}
+
+  /* decisions panel (열린 결정 · 미송 논의) */
+  .dgrid{display:grid;gap:14px;margin-top:16px} @media(min-width:760px){.dgrid{grid-template-columns:1fr 1fr}}
+  .dcard{background:var(--card);border-radius:var(--r2);box-shadow:var(--shadow);padding:18px 20px;border-left:3px solid var(--blue)}
+  .dcard .dn{font-size:11.5px;font-weight:800;color:var(--blue);background:var(--blue-soft);padding:3px 10px;border-radius:999px}
+  .dcard h4{margin:11px 0 7px;font-size:15px;font-weight:800}
+  .dcard p{margin:0;font-size:13.5px;color:var(--sub);line-height:1.6} .dcard p b{color:var(--ink);font-weight:700}
+  .dcard .lean{margin-top:9px;font-size:12.5px;color:var(--blue-strong);font-weight:600}
+  .dcard.flaw{border-left-color:var(--amber)} .dcard.flaw .dn{color:var(--amber);background:var(--amber-soft)} .dcard.flaw .lean{color:var(--amber)}
 
   a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

@@ -1,30 +1,37 @@
   <!-- 채점 지표 -->
   <section>
     <div class="shead"><span class="slabel">채점 지표</span><h2>평가 지표 및 배점 체계</h2>
-      <p class="lead">정확도(Macro F1)와 간결성(<b>행동 지침 글자 수</b>)을 <b>단일 가중식</b>으로 통합합니다. 총 100점.</p>
+      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다 — 아래 <b>열린 결정</b> 참고.</p>
     </div>
 
     <div class="card">
-      <p class="cap">100점 구성</p>
-      <div class="bar" role="img" aria-label="총점 100점: 과제수행 45, 수강률 25, 유효 10, 형식 10, 보안 10">
-        <div class="seg" style="flex:45;background:var(--blue)"><span class="pt">45</span><span class="nm">과제 수행</span></div>
-        <div class="seg" style="flex:25;background:#3f6293"><span class="pt">25</span><span class="nm">수강률</span></div>
-        <div class="seg" style="flex:10;background:#6b86ac"><span class="pt">10</span><span class="nm">유효</span></div>
-        <div class="seg" style="flex:10;background:#9fb2ca"><span class="pt">10</span><span class="nm">형식</span></div>
-        <div class="seg" style="flex:10;background:#cad4e1"><span class="pt" style="color:#4e5968">10</span><span class="nm" style="color:#4e5968">보안</span></div>
+      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 미송 논의</span></p>
+      <div class="split">
+        <div class="scol lead-col">
+          <div class="sk">리더보드 점수 · 실시간 경쟁</div>
+          <div class="si">
+            <div class="it"><span><b>결과값 유효성</b><small>예측 정확성 · 출력 신뢰 (Macro F1)</small></span></div>
+            <div class="it"><span><b>프롬프트 효율성</b><small>지침 글자 · 토큰 수</small></span></div>
+          </div>
+          <p class="snote">참가자가 실시간으로 겨루며 보는 점수 · 여러 제출 중 최고점 자동 선택.</p>
+        </div>
+        <div class="scol">
+          <div class="sk">토탈 점수 · 최종·수상</div>
+          <div class="si">
+            <div class="it"><span><b>리더보드 점수</b><small>위 두 항목</small></span></div>
+            <div class="it"><span><b>온라인 수강률</b><small>VOD 3개 각 30%↑</small></span></div>
+            <div class="it"><span><b>제출형식 준수</b><small>출력 계약</small></span></div>
+            <div class="it"><span><b>보안 적합성</b><small>개인정보 · 금지어</small></span></div>
+          </div>
+          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 미송 확인 필요.</b></p>
+        </div>
       </div>
-      <div class="lg">
-        <div class="r"><span class="sw" style="background:var(--blue)"></span><span>과제 수행 <small>정확도 40.5 + 간결성 4.5</small></span><span class="pv">45</span></div>
-        <div class="r"><span class="sw" style="background:#3f6293"></span><span>온라인 수강률 <small>VOD 3개 각 30%↑</small></span><span class="pv">25</span></div>
-        <div class="r"><span class="sw" style="background:#6b86ac"></span><span>결과값 유효성 <small>답변 파싱·허용값</small></span><span class="pv">10</span></div>
-        <div class="r"><span class="sw" style="background:#9fb2ca"></span><span>제출형식 준수 <small>출력 계약 준수</small></span><span class="pv">10</span></div>
-        <div class="r"><span class="sw" style="background:#cad4e1"></span><span>보안 적합성 <small>개인정보·금지어</small></span><span class="pv">10</span></div>
-      </div>
-      <p class="note">정확도가 0.9 가중 → 오답은 자동으로 저득점, 별도 게이트 불필요.</p>
+      <div class="warn"><span class="wk">배점 결정 필요</span>정확한 점수 배분은 <b>대회 의도</b>(LLM 활용 능력 향상 vs 다양한 경험)와 <b>문제 수</b>(1 vs 4)에 따라 달라집니다.<br>참고 — <b>IITP 공식</b> 예측 40·신뢰 25·활용 20·문제해결 10·규격 5<br><b>DACON 롯데</b> 최고값·단일 가중.</div>
+      <div class="warn"><span class="wk">권장(leaning)</span>프롬프트 효율성은 결과 성능이 일정 수준 이상일 때만 <b>보조 지표</b>(동점 처리 또는 소배점 5~10점)로 반영.<br>무조건 짧게 써서 성능이 낮아지는 역효과를 막기 위해 <b>결과값 유효성을 1차 기준</b>으로 둡니다.</div>
     </div>
 
     <div class="mcard">
-      <div class="mtitle">① 정확도 · Macro F1</div>
+      <div class="mtitle">① 결과값 유효성 · Macro F1</div>
       <div class="mbody">
         <div class="eq"><div class="eqin">F1<sub>c</sub>   = 2·P<sub>c</sub>·R<sub>c</sub> / (P<sub>c</sub> + R<sub>c</sub>)
 MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
@@ -34,32 +41,20 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
           <li><span class="dt">재현율 R</span><span>실제 A 중 모델이 A로 맞힌 비율</span></li>
           <li><span class="dt">F1</span><span>정밀도·재현율을 합친 값 (조화평균)</span></li>
           <li><span class="dt">Macro F1</span><span>등급마다 F1을 구해 평균 — 드문 등급도 공평</span></li>
-          <li><span class="dt">평균 F1</span><span>두 라벨(위험·주기) F1의 평균 → 정확도</span></li>
+          <li><span class="dt">평균 F1</span><span>두 라벨(위험·주기) F1의 평균 → 예측 정확성</span></li>
         </ul>
       </div>
     </div>
     <div class="mcard">
-      <div class="mtitle">② 간결성 · 행동 지침 글자 수 L</div>
+      <div class="mtitle">② 프롬프트 효율성 · 글자/토큰 수 <span class="tbd">계산식 잠정</span></div>
       <div class="mbody">
-        <div class="eq"><div class="eqin"><span class="lhs">간결성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
-단, C_min = 200,  C_max = 3000</div></div>
+        <div class="eq"><div class="eqin"><span class="lhs">효율성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
+단, 상한·계수는 잠정 (미송 확정)</div></div>
         <ul class="defn">
-          <li><span class="dt">L</span><span>행동 지침 글자 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
-          <li><span class="dt">200자 이하</span><span>1점 (만점)</span></li>
-          <li><span class="dt">3000자</span><span>0점 (하드 캡)</span></li>
-          <li><span class="dt">의미</span><span>좋은 지침일수록 군더더기가 적다는 가정</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="mcard">
-      <div class="mtitle">③ 통합 · 총점 (90/10 가중)</div>
-      <div class="mbody">
-        <div class="eq"><div class="eqin"><span class="lhs">과제수행</span> = 45 · ( <span class="w">0.9</span>·평균F1 + <span class="w">0.1</span>·간결성 )
-<span class="lhs">총점</span>     = 과제수행 + 25·VOD + 10·유효 + 10·형식 + 10·보안</div></div>
-        <ul class="defn">
-          <li><span class="dt">과제수행</span><span>정답 90% + 간결성 10% → 45점</span></li>
-          <li><span class="dt">＋ 나머지</span><span>수강률 25 · 유효 10 · 형식 10 · 보안 10</span></li>
-          <li><span class="dt">핵심</span><span>정답이 압도적 비중이라 오답은 자동으로 하위권</span></li>
+          <li><span class="dt">L</span><span>지침 글자·토큰 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
+          <li><span class="dt">방향</span><span>같은 수준의 결과 성능이라면 <b>더 간결한 프롬프트</b>에 보조 점수 (롯데 관례)</span></li>
+          <li><span class="dt">하드 캡</span><span>3000자 초과 시 제출 반려 (payload·비용)</span></li>
+          <li><span class="dt">잠정</span><span>정확한 계산식·상한은 대회 의도에 맞춰 확정</span></li>
         </ul>
       </div>
     </div>

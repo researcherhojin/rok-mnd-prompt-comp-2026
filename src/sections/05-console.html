@@ -1,7 +1,7 @@
   <!-- 제출 콘솔 -->
   <section>
     <div class="shead"><span class="slabel">참가자 대시보드</span><h2>참가자 제출·검증 환경</h2>
-      <p class="lead">코딩 테스트처럼 <b>행동 지침</b>을 작성해 <b>[샘플 실행]</b>(공개 train)으로 검증하고 <b>[제출]</b>합니다 · 실행 50회 / 제출 3회 (1일).</p>
+      <p class="lead">코딩 테스트처럼 <b>행동 지침</b>을 작성해 <b>[샘플 실행]</b>(공개 샘플)으로 검증·<b>[제출]</b> · 1일 <span style="white-space:nowrap">샘플 50회</span> / <span style="white-space:nowrap">제출 3회</span>.<br><b>모바일 우선</b> · 작업은 <b>세션 지속</b>(중단·재개, 콘솔을 닫아도 서버 저장·백그라운드 진행).</p>
     </div>
     <div class="ide">
       <div class="ide-bar">
@@ -28,7 +28,7 @@
         <span class="btn-submit">제출 →</span>
       </div>
       <div class="ide-results">
-        <div class="res-head">샘플 테스트 · 공개 train 5행 <span class="n">(공식 채점 아님)</span></div>
+        <div class="res-head">샘플 테스트 · 공개 샘플 데이터 5행 <span class="n">(공식 채점 아님)</span></div>
         <div class="scroll">
           <table>
             <thead><tr><th>#</th><th>입력 (요약)</th><th>기대 정답</th><th>에이전트 출력</th><th>판정</th></tr></thead>
@@ -41,8 +41,18 @@
             </tbody>
           </table>
         </div>
-        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 test 채점과 다를 수 있음</span></div>
+        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 비공개 데이터 채점과 다를 수 있음</span></div>
       </div>
     </div>
-    <p class="note">[샘플 실행]은 정답이 공개된 train으로 즉시 결과를 보여주고, [제출]만 숨겨진 test 30행으로 공식 채점됩니다.</p>
+    <p class="note">[샘플 실행]은 정답이 공개된 샘플 데이터로 즉시 결과를 보여주고, [제출]만 숨겨진 비공개 데이터 30행으로 공식 채점됩니다.</p>
+    <p class="note"><b>제출 내역</b> — 공식 제출별 <b>상태·제출 시각·점수·파싱 성공 여부·리더보드 반영</b>을 확인합니다. 상태: 채점 대기 · 채점 중 · 채점 완료 · 검토 필요 · 실패.</p>
+    <div class="warn"><span class="wk">참가 환경</span>사지방(PC) 대신 <b>핸드폰</b> 위주 · 갑작스런 중단 대비 <b>세션 지속·백그라운드 저장</b> 필수.<br>초급 친화를 위해 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>를 쓰게 하는 <b>가이드형 다단계</b>(Shape B)도 검토 중 — <b>열린 결정 ④</b>.</div>
+    <div class="card" style="margin-top:16px">
+      <p class="cap">LLM 질문 도우미 <span class="tbd">선택 · 검토 중</span></p>
+      <p class="labdesc" style="margin:8px 0 0">VOD 개념·데이터 컬럼 의미·프롬프트 작성 방향을 질문할 수 있습니다. 단, 문제 <b>정답을 직접 요구</b>하거나 <b>비공개 데이터 예측을 대신 시키는</b> 질문은 차단합니다(사용 로그·토큰 기록). 챗봇 탑재 시 서비스 범위·비용·필터링 정책이 달라지므로 개발 범위 결정 필요.<br><b>학습·이해를 돕는 기능이며 공식 채점에 직접 관여하지 않습니다.</b> 사용 로그는 운영·보안 목적으로 저장하고, <b>실제 군사정보·개인정보 입력은 금지</b>합니다.</p>
+      <div class="adlist">
+        <div class="a"><span class="mk">허용</span><span>"Macro F1이 무엇인가요?" · "정비횟수·가동시간은 어떤 의미인가요?" · "출력 형식을 지키려면 어떻게 쓰나요?"</span></div>
+        <div class="d"><span class="mk">제한</span><span>"이 문제 정답 프롬프트를 써줘" · "비공개 데이터에서 HIGH 나올 조건 알려줘" · "내 점수 최대화 프롬프트 대신 만들어줘"</span></div>
+      </div>
+    </div>
   </section>

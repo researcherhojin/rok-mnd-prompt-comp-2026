@@ -1,0 +1,35 @@
+  <!-- 운영 · 관리자 · 비용 -->
+  <section>
+    <div class="shead"><span class="slabel">운영 · 비용</span><h2>관리자 기능 및 비용 산정</h2>
+      <p class="lead">운영자가 신청·수강·제출·채점·수상을 한 화면에서 관리하고, 대규모 LLM 호출 비용을 통제합니다.</p>
+    </div>
+    <div class="card">
+      <p class="cap">관리자 · 운영 기능</p>
+      <div class="lbnote archnote">
+        <div class="ln"><span class="lk">참가자·제출</span>참가자 목록(소속·수강률·제출·점수) · 제출 내역(프롬프트·모델 원출력·파싱·점수) 조회</div>
+        <div class="ln"><span class="lk">재채점</span>개별/전체 일괄 재채점 · 모델·기준 변경 시 재산정</div>
+        <div class="ln"><span class="lk">리더보드</span>공개/비공개·구간/등수 전환 · 특정 제출 제외</div>
+        <div class="ln"><span class="lk">이상 탐지</span>금지어·개인정보·<b>군사정보</b> · 유사/반복 프롬프트 · 부정 제출</div>
+        <div class="ln"><span class="lk">운영 로그</span>API 호출량·토큰·실패율·큐 대기·채점 오류</div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">비용 · 호출량 예시 <span class="tbd">모델 단가 변동 시 재산정</span></p>
+      <div class="eq"><div class="eqin">공식 채점 최악 = 참가자 1만 × 1일 3회 × 비공개 30행
+             = <span class="w">최대 90만 호출/일</span></div></div>
+      <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
+        <div class="ln"><span class="lk">억제</span>공식 3회·미리보기 50회 상한 · 큐 기반 비동기 · 예산 초과 시 대기/차단</div>
+        <div class="ln"><span class="lk">배치</span>행당 1회 대신 <b>미니배치(5~10행)</b> 또는 30행 1회 JSON 배열 검토 — 비용↓, 출력형식 실패 리스크와 절충</div>
+        <div class="ln"><span class="lk">경량화</span>non-reasoning 소형 모델 · 프롬프트 캐싱(system 고정) · 동일 지침 중복 제거</div>
+      </div>
+    </div>
+    <div class="card">
+      <p class="cap">개발사 전달 핵심</p>
+      <p class="labdesc" style="margin:8px 0 0">단순 제출 게시판이 아니라, 참가자가 낸 <b>행동 지침 프롬프트를 서버가 동일 조건에서 재실행</b>하고 LLM 출력을 자동 파싱해 정답과 비교한 뒤 리더보드에 반영하는 <b>비동기 자동채점 시스템</b>입니다.</p>
+      <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
+        <div class="ln"><span class="lk">분리</span>웹 접수와 채점 워커를 분리(마감 폭주에도 접수 즉시 · 채점은 큐·워커)</div>
+        <div class="ln"><span class="lk">격리</span>비공개 데이터·ground_truth·API 키는 프론트/API에서 접근 불가(워커 전용)</div>
+        <div class="ln"><span class="lk">저장</span>제출 원문·LLM 원출력·파싱 결과·점수·score_version 모두 저장(재현·감사)</div>
+      </div>
+    </div>
+  </section>
