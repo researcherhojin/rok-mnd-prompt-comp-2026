@@ -95,6 +95,7 @@
     "archnote",
     "dgrid",
     "dcard",
-    "pycache"
+    "pycache",
+    "sandboxed"
   ]
 }
