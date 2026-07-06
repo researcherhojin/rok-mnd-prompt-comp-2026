@@ -90,5 +90,7 @@ Scored on the harness's **re-executed model output** (paradigm A — re-executio
 
 - The full CSS is `tokens.css + base.css + components.css` concatenated **in that order** by `build.js` — preserve cascade order when moving rules. Design tokens (navy `--blue:#1c4270`, Toss-style) live in `src/styles/tokens.css`.
 - **Quantitative claims are exact.** No rounding, no `+`/`≈`/`≥` — verify against the spec/formula and write the precise number.
+- **Load-bearing figures must match on every surface** (`site/` + `request/*.md` + `README.md`): dataset sizes (sample 15 / private 30, Public 12 / Private 18), submission caps (미리보기 50 / 제출 3, 3000자 hardcap), and the **tiebreak order** (예측 성능 → Private → 최초 제출; 프롬프트 효율성은 열린 결정이라 hedge). These have drifted before — after changing one surface, grep all of them.
+- **정확도 ≠ Macro F1.** The sample-run feedback (`05-console.html`) shows two *distinct* metrics: 완전일치 행 수 (exact-match rows) and 평균 Macro F1. Never equate them or derive one from the other (`4/5 → F1 0.80` was a real bug; the correct macro-avg was 0.92).
 - Before deploying a `site/` change, run the overflow check (see *Diagrams & Playwright tooling*) — **zero horizontal overflow** at 320/360/390/768/1180.
 - Git: private repo `researcherhojin/rok-mnd-prompt-comp-2026`; commit author is anonymized (`researcherhojin@users.noreply.github.com`). `.env`, `docs/` (주최측 원본 문서·교육자료), and `.wrangler/` are gitignored — keep them out of commits.
