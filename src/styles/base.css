@@ -2,8 +2,8 @@
   .wrap{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
     -webkit-font-smoothing:antialiased;padding:clamp(24px,4vw,56px) clamp(16px,4vw,44px);min-height:100%}
   /* 한국어 줄바꿈: 서술 문단만 어절 단위로 (표·칩·목업·그리드 셀 미적용) */
-  .lede,.lead,.note,.snote,.qlist li,.histcap,.plainexp,.warn,.fact .fv,.fact .fk,
-  .dcard h4,.dcard p,.adlist span,.labdesc,.summarycard,.summarycard *{word-break:keep-all}
+  .lede,.lead,.note,.snote,.histcap,.plainexp,.warn,.fact .fv,.fact .fk,
+  .adlist span,.labdesc{word-break:keep-all}
   .inner{max-width:1040px;margin:0 auto}
   b,strong{font-weight:700}
 
