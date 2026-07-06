@@ -13,7 +13,7 @@ const css = read('src/styles/tokens.css')
   + '\n\n' + read('src/styles/components.css')
 
 // 본문 섹션 (순서 = 파일명 접두 번호)
-const sections = ['01-hero', '01b-summary', '02-data', '03-harness', '04-scoring', '05-console', '06-leaderboard', '06b-architecture', '06c-operations', '07-decisions', '08-footer']
+const sections = ['01-hero', '02-data', '03-harness', '04-scoring', '05-console', '06-leaderboard', '06b-architecture', '06c-operations', '08-footer']
   .map((n) => read('src/sections/' + n + '.html'))
 
 const inner = '<div class="wrap">\n <div class="inner">\n\n'

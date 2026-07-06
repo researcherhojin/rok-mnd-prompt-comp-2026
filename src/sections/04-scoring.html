@@ -1,11 +1,11 @@
   <!-- 채점 지표 -->
   <section>
     <div class="shead"><span class="slabel">채점 지표</span><h2>평가 지표 및 배점 체계</h2>
-      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다 — 아래 <b>열린 결정</b> 참고.</p>
+      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다.</p>
     </div>
 
     <div class="card">
-      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 미송 논의</span></p>
+      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 주최측 논의</span></p>
       <div class="split">
         <div class="scol lead-col">
           <div class="sk">리더보드 점수 · 실시간 경쟁</div>
@@ -23,7 +23,7 @@
             <div class="it"><span><b>제출형식 준수</b><small>출력 계약</small></span></div>
             <div class="it"><span><b>보안 적합성</b><small>개인정보 · 금지어</small></span></div>
           </div>
-          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 미송 확인 필요.</b></p>
+          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 주최측 확인 필요.</b></p>
         </div>
       </div>
       <div class="warn"><span class="wk">배점 결정 필요</span>정확한 점수 배분은 <b>대회 의도</b>(LLM 활용 능력 향상 vs 다양한 경험)와 <b>문제 수</b>(1 vs 4)에 따라 달라집니다.<br>참고 — <b>IITP 공식</b> 예측 40·신뢰 25·활용 20·문제해결 10·규격 5<br><b>DACON 롯데</b> 최고값·단일 가중.</div>
@@ -49,7 +49,7 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
       <div class="mtitle">② 프롬프트 효율성 · 글자/토큰 수 <span class="tbd">계산식 잠정</span></div>
       <div class="mbody">
         <div class="eq"><div class="eqin"><span class="lhs">효율성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
-단, 상한·계수는 잠정 (미송 확정)</div></div>
+단, 상한·계수는 잠정 (주최측 확정)</div></div>
         <ul class="defn">
           <li><span class="dt">L</span><span>지침 글자·토큰 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
           <li><span class="dt">방향</span><span>같은 수준의 결과 성능이라면 <b>더 간결한 프롬프트</b>에 보조 점수 (롯데 관례)</span></li>

@@ -1,15 +1,19 @@
   <!-- 하네스 -->
   <section>
     <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동 실행·채점 구조 (하네스)</h2>
-      <p class="lead">참가자는 코드·정답 파일이 아니라, LLM이 데이터를 <b>어떻게 읽고 판단할지</b>를 지시하는 <span class="hl">행동 지침 프롬프트</span>만 제출합니다.<br>주최 측은 이를 <b>동일 조건에서 재실행</b>해 정답과 대조·채점하며(이 고정 절차가 <b>하네스</b>), 정답 로직이 아니라 <b>프롬프트의 지시 품질</b>을 평가합니다.</p>
+      <p class="lead">참가자는 코드나 정답 파일을 제출하지 않습니다. 대신 LLM이 데이터를 <b>어떻게 읽고, 어떤 기준으로 판단하며, 어떤 형식으로 답해야 하는지</b>를 설명하는 <span class="hl">행동 지침 프롬프트</span>를 제출합니다.<br>주최 측은 모든 참가자에게 동일하게 적용되는 <b>고정 시스템 지시</b>를 구성하고, 그 안에 <b>참가자 행동 지침</b>과 <b>비공개 데이터 입력</b>을 결합해 LLM을 실행합니다. 이후 출력 파싱·정답 대조·점수 산정까지 동일한 절차로 처리하며, 이 고정된 자동 실행·채점 절차를 <b>하네스</b>라고 부릅니다.<br><span class="dim">즉, 주최 측이 정답 로직을 직접 만들어 참가자의 판단을 대신하는 구조가 아니라, 참가자 행동 지침이 LLM에게 데이터 해석·판단을 <b>얼마나 잘 지시하는지</b>를 평가하는 구조입니다.</span></p>
     </div>
     <div class="card">
       <div class="harness">
-        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">비공개 데이터를 raw JSON으로 프롬프트에 입력 — 파생 변수·정답 힌트 없이 모든 참가자가 동일 조건</span></span><span class="htag fixed">주최 고정</span></div>
-        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 실행 <span class="sub">행동 지침이 컬럼 해석·판단 기준·출력 형식을 지시 · 모델·temperature·출력형식 고정 (예시 gpt-4.1-nano — 운영 모델은 비용·성능 검증 후 확정)</span></span><span class="htag part">참가자 작성</span></div>
-        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱·검증 <span class="sub">마지막 줄 `risk_grade, cycle_range` 계약 파싱 · 필수값·허용 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 고정</span></div>
-        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조·채점 <span class="sub">비공개 정답과 대조 → 두 라벨 Macro F1 평균 등 지표 산정 · 원출력·채점결과 저장(재현·감사)</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep"><span class="hn">1</span><span class="ht">고정 시스템 지시 구성 <span class="sub">모든 참가자에게 동일 적용되는 기본 시스템 지시 — 역할 정의·허용 라벨·출력 형식·금지사항·파싱 가능한 형식으로 답변하라는 지시. 예: `risk_grade, cycle_range` 형식으로만 답변</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep edit"><span class="hn">2</span><span class="ht">참가자 행동 지침 삽입 <span class="sub">참가자가 LLM에 전달할 행동 지침 프롬프트 작성 — 컬럼 해석·변수 우선순위·위험 등급 판단 기준·정비주기 구간 선택 기준·경계 사례 처리 원칙·출력 형식 준수 지시</span></span><span class="htag part">참가자 작성</span></div>
+        <div class="hstep"><span class="hn">3</span><span class="ht">비공개 데이터 입력 <span class="sub">채점 시 서버에 저장된 비공개 데이터가 raw JSON 형태로 입력 · 수리기간·위험 점수 같은 파생 변수나 정답 힌트는 없음 · 정답셋과 함께 채점 워커에서만 접근</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep"><span class="hn">4</span><span class="ht">LLM 실행 <span class="sub">고정 시스템 지시 + 참가자 행동 지침 + 비공개 데이터 입력을 바탕으로 예측 생성 · 모델·temperature·출력 형식은 최대한 고정, 운영 모델은 비용·속도·파싱 안정성·응답 품질 검증 후 확정 (참가자 지침이 핵심 변수)</span></span><span class="htag fixed">실행 조건 고정</span></div>
+        <div class="hstep"><span class="hn">5</span><span class="ht">출력 파싱·검증 <span class="sub">출력 계약 `risk_grade, cycle_range` 파싱 · 허용 라벨 HIGH·MEDIUM·LOW / 0-30·31-90·91-180·181+ · 필수값 누락·허용되지 않은 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep"><span class="hn">6</span><span class="ht">정답 대조·채점 <span class="sub">파싱된 결과를 비공개 정답셋과 대조 · 두 라벨 Macro F1 등 정량 지표 산정 · 공식 제출의 원출력·파싱·채점 결과 저장 → 재채점·이의제기·리더보드 검증·감사 기준</span></span><span class="htag fixed">주최 측 고정</span></div>
       </div>
-      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 코드·정답 파일·모델 설정·채점 기준·비공개 데이터에는 접근할 수 없습니다. 프롬프트에는 <b>컬럼 해석·변수 우선순위·등급/구간 기준·경계 사례·출력 형식·불확실 처리</b>를 담을 수 있습니다. 모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 정답셋·API 키는 채점 워커에만 격리됩니다. (전처리→판단→출력을 <b>노드별 프롬프트</b>로 나누는 가이드형 다단계(Shape B)는 <b>열린 결정 ④</b> · 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.)</p>
+      <p class="note">참가자가 통제하는 것은 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 비공개 데이터·정답셋·모델 설정·채점 기준·API 키·하네스 내부 로직에는 접근할 수 없습니다. 정답셋·API 키는 <b>채점 워커에만 격리</b>됩니다.</p>
+      <p class="note">모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.</p>
+      <p class="note">현재 설명은 참가자가 하나의 행동 지침을 제출하는 <b>단일 지침형</b> 구조 기준이며, 초급자 친화성을 높이려면 데이터 이해·전처리 지침 → 판단 기준·분류 지침 → 최종 출력 형식 지침처럼 단계를 나누는 <b>가이드형 다단계(Shape B)</b>도 검토할 수 있습니다. Shape B 채택 시 제출 UI·DB 스키마·LLM 호출 수·비용·채점 파이프라인이 달라져 <b>주최측 결정</b>이 필요합니다.</p>
     </div>
   </section>
