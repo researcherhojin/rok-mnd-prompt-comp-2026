@@ -11,6 +11,8 @@ Two artifact families:
 - **`request/*.md`** — the design specification (Korean). The actual output handed to the 데이원컴퍼니 build team.
 - **`site/`** — a self-contained one-page visual summary of that design, published to Cloudflare Pages (distribution is via the Pages URL only).
 
+Plus **`data/`** — example CSVs generated deterministically from the §1.3 label rules (0 violations, includes boundary cases): `sample.csv` (15 rows, labeled), `private.csv` (30 rows, input only), `ground_truth.csv` (30 rows, labels + Public 12/Private 18 split). Dev/validation aids only — the real competition set must be redesigned (open decision ⑤ below).
+
 ## Build & deploy
 
 **`site/index.html` is generated — never hand-edit it.** Edit the partitions under `src/` and rebuild:
@@ -48,7 +50,7 @@ Shared tooling for all three tasks below: `npm i mermaid` into the scratchpad, a
 A prompt-engineering competition, **not** a predict-file-upload competition:
 
 - The participant submits **only a behavior instruction (행동 지침)** — a prompt. A **fixed harness** re-runs it on a **pinned lightweight model** (e.g. `gpt-4.1-nano`; `seed` + `temperature 0` — exact model TBD, confirmed after validation) against hidden data and scores the model output. (LLM output is not fully deterministic; raw output/parse/score are stored for reproducibility & audit.) Participants never train a model or upload predictions; the instruction itself does all preprocessing/analysis in-context.
-- **Harness = 4 fixed stages, one participant-controlled:** `프롬프트 입력 → LLM 에이전트 호출 → 출력 파싱·검증 → 정답 대조·채점` (stage 2 is the participant's instruction).
+- **Harness = 6 fixed stages, one participant-controlled:** `고정 시스템 지시 구성 → 참가자 행동 지침 삽입 → 비공개 데이터 입력 → LLM 실행 → 출력 파싱·검증 → 정답 대조·채점` (stage 2 is the participant's instruction; the host composes a fixed system instruction and merges the participant's behavior instruction + hidden data before running the LLM).
 - Two labels: `risk_grade` (HIGH/MEDIUM/LOW) and `cycle_range` (0-30 / 31-90 / 91-180 / 181+).
 
 Doc roles: `competition_design_brief` = *what* (data/labels/scoring); `system_functional_spec` = *how* (components/DB/pipeline); `dev_architecture_plan` = infra (front/back/DB); `dev_workplan_scoring_leaderboard` = implementation pseudocode.
@@ -60,9 +62,9 @@ Doc roles: `competition_design_brief` = *what* (data/labels/scoring); `system_fu
 - **Datasets:** `샘플 데이터` (`sample.csv`, public, labeled — for rule inference) and `비공개 데이터` (`private.csv`, hidden — scored). Do **not** revert to train/test; this is not ML training.
 - **Leaderboard split:** `Public/Private` (English) is a subdivision of 비공개 데이터 (Public 12 / Private 18). Deliberately kept distinct from the Korean 비공개 데이터 label — don't conflate the two.
 
-## Scoring — 재논의 중 (7/5 자문단 미팅). **배점 미확정 · 미송 결정**
+## Scoring — 재논의 중 (7/5 자문단 미팅). **배점 미확정 · 주최측 결정**
 
-Scored on the harness's **re-executed model output** (paradigm A — re-execution harness kept; participants do **not** upload a predict file). 7/5 미팅에서 채점 구조가 **리더보드 점수 / 토탈 점수 분리 + 프롬프트 효율성 재도입**으로 재논의됐다. **정확 배점은 대회 의도·문제 수(1 vs 4) 확정 후**(미송/주최측). 아래 IITP 5-dim은 **참고 기준**.
+Scored on the harness's **re-executed model output** (paradigm A — re-execution harness kept; participants do **not** upload a predict file). 7/5 미팅에서 채점 구조가 **리더보드 점수 / 토탈 점수 분리 + 프롬프트 효율성 재도입**으로 재논의됐다. **정확 배점은 대회 의도·문제 수(1 vs 4) 확정 후**(주최측). 아래 IITP 5-dim은 **참고 기준**.
 
 ```
 리더보드 점수 (실시간 경쟁, 최고점 자동 선택) = 결과값 유효성(예측 정확성·Macro F1) + 프롬프트 효율성(글자·토큰)
@@ -75,7 +77,7 @@ Scored on the harness's **re-executed model output** (paradigm A — re-executio
 - **참고 배점(확정 아님):** IITP 공식 = 예측 40 / 신뢰 25 / 데이터활용 20 / 문제해결(커버리지) 10 / 제출규격 5. DACON 롯데 = 최고값·단일 가중.
 - **골드셋(brief §9)은 배점 확정 시 재계산.** 이전 IITP 가정 예시값 A=96.0 · B=70.0 · C=25.0은 **잠정**이며 배점 확정 전까지 회귀 앵커로 고정하지 말 것.
 
-> 열린 결정(미송 논의): ① 대회 의도(능력 vs 경험) ② 1 vs 4 문제 채점 ③ 리더보드/토탈 배점 ④ 제출 형태(Shape A 단일 vs B 가이드형 다단계) ⑤ 데이터 결함(§1.3 규칙이 LLM에 쉽게 추론 → 재설계). 사이트(`site/`) "열린 결정" 섹션과 각 문서 §7/§11에 반영.
+> 열린 결정(주최측 논의): ① 대회 의도(능력 vs 경험) ② 1 vs 4 문제 채점 ③ 리더보드/토탈 배점 ④ 제출 형태(Shape A 단일 vs B 가이드형 다단계) ⑤ 데이터 결함(§1.3 규칙이 LLM에 쉽게 추론 → 재설계). 각 문서 §7/§11에 반영(사이트 시각요약 `site/`에서는 열린 결정 섹션·상단 콜아웃을 제거 — 개발팀 전달용 문서에만 유지).
 
 ## Meeting constraints (7/5) — 반영됨
 - **참가 환경:** 군장병 대상 → 사지방(PC) 대신 **핸드폰 위주**. UI **모바일 우선** + **세션 지속**(중단·재개, 콘솔 닫아도 서버 저장·백그라운드 진행).
