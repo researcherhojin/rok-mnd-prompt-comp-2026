@@ -28,8 +28,8 @@
   .wrap{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
     -webkit-font-smoothing:antialiased;padding:clamp(24px,4vw,56px) clamp(16px,4vw,44px);min-height:100%}
   /* 한국어 줄바꿈: 서술 문단만 어절 단위로 (표·칩·목업·그리드 셀 미적용) */
-  .lede,.lead,.note,.snote,.qlist li,.histcap,.plainexp,.warn,.fact .fv,.fact .fk,
-  .dcard h4,.dcard p,.adlist span,.labdesc,.summarycard,.summarycard *{word-break:keep-all}
+  .lede,.lead,.note,.snote,.histcap,.plainexp,.warn,.fact .fv,.fact .fk,
+  .adlist span,.labdesc{word-break:keep-all}
   .inner{max-width:1040px;margin:0 auto}
   b,strong{font-weight:700}
 
@@ -154,7 +154,7 @@
   .pill{font-size:12px;font-weight:800;padding:4px 11px;border-radius:999px} .pill.pass{color:var(--green);background:var(--green-soft)} .pill.fail{color:var(--red);background:var(--red-soft)}
 
   /* leaderboard */
-  .lbwrap{display:grid;gap:16px} @media(min-width:820px){.lbwrap{grid-template-columns:1.4fr 1fr}}
+  .lbwrap{display:grid;gap:16px} @media(min-width:820px){.lbwrap{grid-template-columns:1.75fr 1fr}}
   .lb .rk{font-family:var(--mono);font-weight:800;font-variant-numeric:tabular-nums;color:var(--sub)} .lb .rk.top{color:var(--blue)}
   .lb .sc{font-weight:800;font-variant-numeric:tabular-nums;font-size:15px} .lb .sub2{font-family:var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
   .lb tbody tr.me td{background:var(--blue-soft)}
@@ -164,7 +164,9 @@
   .lbnote{display:grid;gap:0;margin-top:16px}
   @media(min-width:560px){.lbnote{grid-template-columns:1fr 1fr;column-gap:24px}}
   .lbnote .ln{display:flex;gap:11px;align-items:center;padding:11px 0;font-size:14px;color:var(--sub);border-bottom:1px solid var(--line)}
+  .lbnote:not(.archnote) .ln{flex-direction:column;align-items:flex-start;gap:7px}
   .lbnote .lk{font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-soft);padding:4px 10px;border-radius:999px;flex:none}
+  .lbnote:not(.archnote) .lv{line-height:1.55}
   .mypos{background:linear-gradient(160deg,#1c4270,#12294a);color:#fff;display:flex;flex-direction:column}
   .mypos .pk{font-size:13px;font-weight:600;opacity:.9}
   .mypos .big{font-size:44px;font-weight:900;line-height:1;margin:10px 0 4px;letter-spacing:-.02em}
@@ -184,14 +186,6 @@
   .fcol{display:flex;flex-direction:column;gap:9px;min-width:0} .fcol-k{font-size:12px;font-weight:700;color:var(--muted)}
   .doc{font-size:13.5px;color:var(--sub);text-decoration:none;font-weight:500;overflow-wrap:anywhere} .doc b{color:var(--ink);font-weight:700;margin-right:6px}
   a.doc:hover{color:var(--blue)} a.doc::after{content:" ↗";color:var(--muted);font-size:11px}
-
-  /* top decision summary */
-  .summarycard{border-top:3px solid var(--blue)}
-  .qlist{margin:14px 0 0;padding:0;list-style:none;counter-reset:q;display:grid;gap:11px}
-  @media(min-width:760px){.qlist{grid-template-columns:1fr 1fr;column-gap:26px}}
-  .qlist li{counter-increment:q;position:relative;padding-left:34px;font-size:14.5px;color:var(--sub);line-height:1.55}
-  .qlist li b{color:var(--ink);font-weight:700}
-  .qlist li::before{content:counter(q);position:absolute;left:0;top:0;width:23px;height:23px;border-radius:999px;background:var(--blue);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
 
   /* allow/deny examples (LLM helper) */
   .adlist{display:grid;gap:8px;margin:10px 0 0} .adlist .a,.adlist .d{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5}
@@ -218,15 +212,6 @@
   .lbnote.archnote{grid-template-columns:1fr;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
   .archnote .ln{align-items:flex-start} .archnote .lk{margin-top:1px}
 
-  /* decisions panel (열린 결정 · 미송 논의) */
-  .dgrid{display:grid;gap:14px;margin-top:16px} @media(min-width:760px){.dgrid{grid-template-columns:1fr 1fr}}
-  .dcard{background:var(--card);border-radius:var(--r2);box-shadow:var(--shadow);padding:18px 20px;border-left:3px solid var(--blue)}
-  .dcard .dn{font-size:11.5px;font-weight:800;color:var(--blue);background:var(--blue-soft);padding:3px 10px;border-radius:999px}
-  .dcard h4{margin:11px 0 7px;font-size:15px;font-weight:800}
-  .dcard p{margin:0;font-size:13.5px;color:var(--sub);line-height:1.6} .dcard p b{color:var(--ink);font-weight:700}
-  .dcard .lean{margin-top:9px;font-size:12.5px;color:var(--blue-strong);font-weight:600}
-  .dcard.flaw{border-left-color:var(--amber)} .dcard.flaw .dn{color:var(--amber);background:var(--amber-soft)} .dcard.flaw .lean{color:var(--amber)}
-
   a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -238,34 +223,20 @@
   <header>
     <span class="eyebrow">국방AI 프롬프트 경진대회 · 출제 후보 04</span>
     <h1>설비 정비주기 예측형 — 자동채점·리더보드 설계안</h1>
-    <p class="lede">입력→LLM 실행→파싱→채점까지 <b>자동 실행·채점 구조는 주최 측이 고정</b>하고, 참가자는 <span class="hl">LLM 행동 지침 프롬프트</span>만 작성합니다.<br>자문 범위 세 축(문제·데이터셋 / 자동채점 / 리더보드)을 정리하고, <b>미송 논의가 필요한 열린 결정</b>을 아래에 모았습니다.</p>
+    <p class="lede">입력→LLM 실행→파싱→채점까지 <b>자동 실행·채점 구조는 주최 측이 고정</b>하고, 참가자는 <span class="hl">LLM 행동 지침 프롬프트</span>만 작성합니다.<br>자문 범위 세 축(문제·데이터셋 / 자동채점 / 리더보드)을 정리했습니다.</p>
     <div class="facts">
-      <div class="fact"><div class="fk">규모</div><div class="fv">약 1만 명 · 예상 동시 500명(추정)</div></div>
+      <div class="fact"><div class="fk">규모(추정)</div><div class="fv">약 1만 명 · 예상 동시 500명</div></div>
       <div class="fact"><div class="fk">참가자 작성</div><div class="fv">에이전트 행동 지침 프롬프트</div></div>
       <div class="fact"><div class="fk">1일 한도(예정)</div><div class="fv">미리보기 50 · 제출 3</div></div>
       <div class="fact"><div class="fk">채점</div><div class="fv">정답 대조 · Macro F1 중심</div></div>
     </div>
   </header>
 
-  <!-- 상단 요약: 미송 결정 요청 -->
-  <section>
-    <div class="card summarycard">
-      <p class="cap">미송님 확인 필요 · 결정 5가지</p>
-      <p class="lead" style="margin-top:6px">본 문서는 4개 후보 주제 중 <b>‘설비 정비주기 예측형’ 1개 기준</b>의 상세 설계안입니다.<br>아래 5가지가 확정되면 배점·문제 수·제출 형태 등 나머지 설계가 정해집니다.</p>
-      <ol class="qlist">
-        <li>대회 목적은 <b>LLM 활용 능력 평가</b>에 가까운가, <b>AI 활용 경험 제공</b>에 가까운가?</li>
-        <li>참가자는 <b>4개 문제 전부</b>를 푸는가 <b>일부 선택</b>인가? (점수: 합 / 평균 / 최고점)</li>
-        <li>리더보드는 <b>결과 성능 중심</b>인가, <b>프롬프트 효율성 포함</b>인가?</li>
-        <li>제출 방식은 <b>단일 프롬프트형</b>인가, <b>단계별 가이드형</b>인가?</li>
-        <li>샘플 규칙이 <b>너무 쉽게 추론되는 문제</b>를 재설계해도 되는가?</li>
-      </ol>
-    </div>
-  </section>
-
   <!-- 문제 · 데이터셋 -->
   <section>
-    <div class="shead"><span class="slabel">문제 · 데이터셋</span><h2>예측 과제 및 데이터셋 정의</h2>
+    <div class="shead"><span class="slabel">문제 · 데이터셋</span><h2>예측 과제 및 데이터셋 정의 <span class="tbd">잠정 · 예시</span></h2>
       <p class="lead">장비 유지보수 이력(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <b>샘플 데이터</b> 15행으로 규칙을 추론하고, 채점은 숨겨진 <b>비공개 데이터</b> 30행으로 이뤄집니다.<br><span class="dim">(30행은 설명·검증용 기준 — 실제 운영 시 리더보드 안정성·변별력을 위해 100~300행 확장 검토)</span></p>
+      <p class="note">※ 아래 <b>컬럼 구조·데이터 규모·수치·정답 규칙</b>은 설계 설명을 위한 <b>예시</b>이며, 주최측 확정 시 변경됩니다. (라벨 정의 자체는 설계안)</p>
     </div>
 
     <div class="card">
@@ -350,34 +321,38 @@
           </tbody></table></div>
         </div>
       </div>
-      <div class="warn"><span class="wk">데이터 결함 · 재설계 필요</span>현재 규칙은 <b>설명용으로는 적합하나 실제 출제 규칙으로는 변별력이 부족</b>합니다. 참가자가 컬럼 설명·문제 조건을 그대로 LLM에 입력하면 고득점할 수 있으므로, 실제 비공개 채점셋은 <b>비선형 조건·특성 상호작용·경계 사례·일부 노이즈</b>를 포함해 <b>별도로 재설계</b>해야 합니다. (열린 결정 ⑤)</div>
+      <div class="warn"><span class="wk">데이터 결함 · 재설계 필요</span>현재 규칙은 <b>설명용으로는 적합하나 실제 출제 규칙으로는 변별력이 부족</b>합니다. 참가자가 컬럼 설명·문제 조건을 그대로 LLM에 입력하면 고득점할 수 있으므로, 실제 비공개 채점셋은 <b>비선형 조건·특성 상호작용·경계 사례·일부 노이즈</b>를 포함해 <b>별도로 재설계</b>해야 합니다.</div>
     </div>
   </section>
 
   <!-- 하네스 -->
   <section>
     <div class="shead"><span class="slabel">자동채점 · 하네스</span><h2>자동 실행·채점 구조 (하네스)</h2>
-      <p class="lead">참가자는 코드·정답 파일이 아니라, LLM이 데이터를 <b>어떻게 읽고 판단할지</b>를 지시하는 <span class="hl">행동 지침 프롬프트</span>만 제출합니다.<br>주최 측은 이를 <b>동일 조건에서 재실행</b>해 정답과 대조·채점하며(이 고정 절차가 <b>하네스</b>), 정답 로직이 아니라 <b>프롬프트의 지시 품질</b>을 평가합니다.</p>
+      <p class="lead">참가자는 코드나 정답 파일을 제출하지 않습니다. 대신 LLM이 데이터를 <b>어떻게 읽고, 어떤 기준으로 판단하며, 어떤 형식으로 답해야 하는지</b>를 설명하는 <span class="hl">행동 지침 프롬프트</span>를 제출합니다.<br>주최 측은 모든 참가자에게 동일하게 적용되는 <b>고정 시스템 지시</b>를 구성하고, 그 안에 <b>참가자 행동 지침</b>과 <b>비공개 데이터 입력</b>을 결합해 LLM을 실행합니다. 이후 출력 파싱·정답 대조·점수 산정까지 동일한 절차로 처리하며, 이 고정된 자동 실행·채점 절차를 <b>하네스</b>라고 부릅니다.<br><span class="dim">즉, 주최 측이 정답 로직을 직접 만들어 참가자의 판단을 대신하는 구조가 아니라, 참가자 행동 지침이 LLM에게 데이터 해석·판단을 <b>얼마나 잘 지시하는지</b>를 평가하는 구조입니다.</span></p>
     </div>
     <div class="card">
       <div class="harness">
-        <div class="hstep"><span class="hn">1</span><span class="ht">프롬프트 입력 <span class="sub">비공개 데이터를 raw JSON으로 프롬프트에 입력 — 파생 변수·정답 힌트 없이 모든 참가자가 동일 조건</span></span><span class="htag fixed">주최 고정</span></div>
-        <div class="hstep edit"><span class="hn">2</span><span class="ht">LLM 실행 <span class="sub">행동 지침이 컬럼 해석·판단 기준·출력 형식을 지시 · 모델·temperature·출력형식 고정 (예시 gpt-4.1-nano — 운영 모델은 비용·성능 검증 후 확정)</span></span><span class="htag part">참가자 작성</span></div>
-        <div class="hstep"><span class="hn">3</span><span class="ht">출력 파싱·검증 <span class="sub">마지막 줄 `risk_grade, cycle_range` 계약 파싱 · 필수값·허용 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 고정</span></div>
-        <div class="hstep"><span class="hn">4</span><span class="ht">정답 대조·채점 <span class="sub">비공개 정답과 대조 → 두 라벨 Macro F1 평균 등 지표 산정 · 원출력·채점결과 저장(재현·감사)</span></span><span class="htag fixed">주최 고정</span></div>
+        <div class="hstep"><span class="hn">1</span><span class="ht">고정 시스템 지시 구성 <span class="sub">모든 참가자에게 동일 적용되는 기본 시스템 지시 — 역할 정의·허용 라벨·출력 형식·금지사항·파싱 가능한 형식으로 답변하라는 지시. 예: `risk_grade, cycle_range` 형식으로만 답변</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep edit"><span class="hn">2</span><span class="ht">참가자 행동 지침 삽입 <span class="sub">참가자가 LLM에 전달할 행동 지침 프롬프트 작성 — 컬럼 해석·변수 우선순위·위험 등급 판단 기준·정비주기 구간 선택 기준·경계 사례 처리 원칙·출력 형식 준수 지시</span></span><span class="htag part">참가자 작성</span></div>
+        <div class="hstep"><span class="hn">3</span><span class="ht">비공개 데이터 입력 <span class="sub">채점 시 서버에 저장된 비공개 데이터가 raw JSON 형태로 입력 · 수리기간·위험 점수 같은 파생 변수나 정답 힌트는 없음 · 정답셋과 함께 채점 워커에서만 접근</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep"><span class="hn">4</span><span class="ht">LLM 실행 <span class="sub">고정 시스템 지시 + 참가자 행동 지침 + 비공개 데이터 입력을 바탕으로 예측 생성 · 모델·temperature·출력 형식은 최대한 고정, 운영 모델은 비용·속도·파싱 안정성·응답 품질 검증 후 확정 (참가자 지침이 핵심 변수)</span></span><span class="htag fixed">실행 조건 고정</span></div>
+        <div class="hstep"><span class="hn">5</span><span class="ht">출력 파싱·검증 <span class="sub">출력 계약 `risk_grade, cycle_range` 파싱 · 허용 라벨 HIGH·MEDIUM·LOW / 0-30·31-90·91-180·181+ · 필수값 누락·허용되지 않은 라벨·형식 위반은 행 0점/감점</span></span><span class="htag fixed">주최 측 고정</span></div>
+        <div class="hstep"><span class="hn">6</span><span class="ht">정답 대조·채점 <span class="sub">파싱된 결과를 비공개 정답셋과 대조 · 두 라벨 Macro F1 등 정량 지표 산정 · 공식 제출의 원출력·파싱·채점 결과 저장 → 재채점·이의제기·리더보드 검증·감사 기준</span></span><span class="htag fixed">주최 측 고정</span></div>
       </div>
-      <p class="note">참가자가 통제하는 변수는 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 코드·정답 파일·모델 설정·채점 기준·비공개 데이터에는 접근할 수 없습니다. 프롬프트에는 <b>컬럼 해석·변수 우선순위·등급/구간 기준·경계 사례·출력 형식·불확실 처리</b>를 담을 수 있습니다. 모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 정답셋·API 키는 채점 워커에만 격리됩니다. (전처리→판단→출력을 <b>노드별 프롬프트</b>로 나누는 가이드형 다단계(Shape B)는 <b>열린 결정 ④</b> · 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.)</p>
+      <p class="note">참가자가 통제하는 것은 <b style="color:var(--blue)">행동 지침 프롬프트</b>뿐입니다 — 비공개 데이터·정답셋·모델 설정·채점 기준·API 키·하네스 내부 로직에는 접근할 수 없습니다. 정답셋·API 키는 <b>채점 워커에만 격리</b>됩니다.</p>
+      <p class="note">모델·temperature·출력 형식을 최대한 고정해 <b>재현성을 높이되</b>, LLM 특성상 완전히 동일한 응답은 보장하기 어려워 <b>공식 제출의 원출력·채점 결과를 저장</b>해 이의·재채점·검증 기준으로 씁니다. 재현성·격리 상세는 <b>시스템 아키텍처</b> 참고.</p>
+      <p class="note">현재 설명은 참가자가 하나의 행동 지침을 제출하는 <b>단일 지침형</b> 구조 기준이며, 초급자 친화성을 높이려면 데이터 이해·전처리 지침 → 판단 기준·분류 지침 → 최종 출력 형식 지침처럼 단계를 나누는 <b>가이드형 다단계(Shape B)</b>도 검토할 수 있습니다. Shape B 채택 시 제출 UI·DB 스키마·LLM 호출 수·비용·채점 파이프라인이 달라져 <b>주최측 결정</b>이 필요합니다.</p>
     </div>
   </section>
 
   <!-- 채점 지표 -->
   <section>
     <div class="shead"><span class="slabel">채점 지표</span><h2>평가 지표 및 배점 체계</h2>
-      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다 — 아래 <b>열린 결정</b> 참고.</p>
+      <p class="lead">채점은 <b>리더보드 점수</b>(실시간 경쟁)와 <b>토탈 점수</b>(최종·수상)로 나눕니다.<br><b>정확한 배점은 대회 의도·문제 수 확정 후</b> 결정합니다.</p>
     </div>
 
     <div class="card">
-      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 미송 논의</span></p>
+      <p class="cap">점수 구조 <span class="tbd">배점 미정 · 주최측 논의</span></p>
       <div class="split">
         <div class="scol lead-col">
           <div class="sk">리더보드 점수 · 실시간 경쟁</div>
@@ -395,7 +370,7 @@
             <div class="it"><span><b>제출형식 준수</b><small>출력 계약</small></span></div>
             <div class="it"><span><b>보안 적합성</b><small>개인정보 · 금지어</small></span></div>
           </div>
-          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 미송 확인 필요.</b></p>
+          <p class="snote">최종 순위·수상 결정 · <b>수강률·보안 위반을 점수화할지, 응시/실격 게이트로 둘지는 주최측 확인 필요.</b></p>
         </div>
       </div>
       <div class="warn"><span class="wk">배점 결정 필요</span>정확한 점수 배분은 <b>대회 의도</b>(LLM 활용 능력 향상 vs 다양한 경험)와 <b>문제 수</b>(1 vs 4)에 따라 달라집니다.<br>참고 — <b>IITP 공식</b> 예측 40·신뢰 25·활용 20·문제해결 10·규격 5<br><b>DACON 롯데</b> 최고값·단일 가중.</div>
@@ -421,7 +396,7 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
       <div class="mtitle">② 프롬프트 효율성 · 글자/토큰 수 <span class="tbd">계산식 잠정</span></div>
       <div class="mbody">
         <div class="eq"><div class="eqin"><span class="lhs">효율성</span> = clip( (<span class="w">C_max</span> − L) / (<span class="w">C_max</span> − <span class="w">C_min</span>), 0, 1 )
-단, 상한·계수는 잠정 (미송 확정)</div></div>
+단, 상한·계수는 잠정 (주최측 확정)</div></div>
         <ul class="defn">
           <li><span class="dt">L</span><span>지침 글자·토큰 수 (입력 <span class="inlinecode">{{input}}</span> 제외 · 폼 실시간 카운터)</span></li>
           <li><span class="dt">방향</span><span>같은 수준의 결과 성능이라면 <b>더 간결한 프롬프트</b>에 보조 점수 (롯데 관례)</span></li>
@@ -475,12 +450,12 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
             </tbody>
           </table>
         </div>
-        <div class="res-foot">추정 정확도 <span class="okk">4 / 5</span> · 평균 F1 ≈ 0.80 <span style="color:var(--muted);font-weight:500;font-size:13px">— 숨겨진 비공개 데이터 채점과 다를 수 있음</span></div>
+        <div class="res-foot">완전일치 <span class="okk">4 / 5행</span> · 평균 F1 <span class="okk">0.92</span> <span style="color:var(--muted);font-weight:500;font-size:13px">— 두 라벨 Macro F1 평균 · 숨겨진 비공개 데이터 채점과 다를 수 있음</span></div>
       </div>
     </div>
     <p class="note">[샘플 실행]은 정답이 공개된 샘플 데이터로 즉시 결과를 보여주고, [제출]만 숨겨진 비공개 데이터 30행으로 공식 채점됩니다.</p>
     <p class="note"><b>제출 내역</b> — 공식 제출별 <b>상태·제출 시각·점수·파싱 성공 여부·리더보드 반영</b>을 확인합니다. 상태: 채점 대기 · 채점 중 · 채점 완료 · 검토 필요 · 실패.</p>
-    <div class="warn"><span class="wk">참가 환경</span>사지방(PC) 대신 <b>핸드폰</b> 위주 · 갑작스런 중단 대비 <b>세션 지속·백그라운드 저장</b> 필수.<br>초급 친화를 위해 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>를 쓰게 하는 <b>가이드형 다단계</b>(Shape B)도 검토 중 — <b>열린 결정 ④</b>.</div>
+    <div class="warn"><span class="wk">참가 환경</span>사지방(PC) 대신 <b>핸드폰</b> 위주 · 갑작스런 중단 대비 <b>세션 지속·백그라운드 저장</b> 필수.<br>초급 친화를 위해 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>를 쓰게 하는 <b>가이드형 다단계</b>(Shape B)도 검토 중입니다.</div>
     <div class="card" style="margin-top:16px">
       <p class="cap">LLM 질문 도우미 <span class="tbd">선택 · 검토 중</span></p>
       <p class="labdesc" style="margin:8px 0 0">VOD 개념·데이터 컬럼 의미·프롬프트 작성 방향을 질문할 수 있습니다. 단, 문제 <b>정답을 직접 요구</b>하거나 <b>비공개 데이터 예측을 대신 시키는</b> 질문은 차단합니다(사용 로그·토큰 기록). 챗봇 탑재 시 서비스 범위·비용·필터링 정책이 달라지므로 개발 범위 결정 필요.<br><b>학습·이해를 돕는 기능이며 공식 채점에 직접 관여하지 않습니다.</b> 사용 로그는 운영·보안 목적으로 저장하고, <b>실제 군사정보·개인정보 입력은 금지</b>합니다.</p>
@@ -513,17 +488,17 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
           </table>
         </div>
         <div class="lbnote">
-          <div class="ln"><span class="lk">리더보드 점수</span> 결과값 유효성 + 프롬프트 효율성 · 최고점 자동 선택</div>
-          <div class="ln"><span class="lk">토탈 점수</span> + 수강·형식·보안 → 최종·수상 (별도 공지)</div>
-          <div class="ln"><span class="lk">동점</span> 예측 성능 → Private → 프롬프트 효율성 또는 최초 제출 <span class="dim">(최종 기준은 배점 확정 시)</span></div>
-          <div class="ln"><span class="lk">누적 제출</span> 1일 최대 3회 · 대회 기간 누적 제출 수 표시</div>
-          <div class="ln"><span class="lk">마스킹</span> 참가자명 일부 가림 · 소속 공개 토글</div>
+          <div class="ln"><span class="lk">리더보드 점수</span> <span class="lv">결과값 유효성 + 프롬프트 효율성 · 최고점 자동 선택</span></div>
+          <div class="ln"><span class="lk">토탈 점수</span> <span class="lv">+ 수강·형식·보안 → 최종·수상 (별도 공지)</span></div>
+          <div class="ln"><span class="lk">동점</span> <span class="lv">예측 성능 → Private → 최초 제출 <span class="dim">(프롬프트 효율성 반영은 배점 확정 시)</span></span></div>
+          <div class="ln"><span class="lk">누적 제출</span> <span class="lv">1일 최대 3회 · 대회 기간 누적 제출 수 표시</span></div>
+          <div class="ln"><span class="lk">마스킹</span> <span class="lv">참가자명 일부 가림 · 소속 공개 토글</span></div>
         </div>
       </div>
       <div class="card mypos">
         <span class="pk">내 위치 · 홍길동</span>
         <div class="big">1,187등</div>
-        <div class="sc2">9,842명 중 · 상위 12% · 91.3점</div>
+        <div class="sc2">10,000명 중 · 상위 12% · 91.3점</div>
         <div class="hist" role="img" aria-label="점수 분포에서 내 위치는 상위 12%">
           <div class="hcol"><div class="hbar" style="height:14px"></div><div class="hlab">~60</div></div>
           <div class="hcol"><div class="hbar" style="height:44px"></div><div class="hlab">60-70</div></div>
@@ -565,7 +540,7 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
   <!-- 운영 · 관리자 · 비용 -->
   <section>
     <div class="shead"><span class="slabel">운영 · 비용</span><h2>관리자 기능 및 비용 산정</h2>
-      <p class="lead">운영자가 신청·수강·제출·채점·수상을 한 화면에서 관리하고, 대규모 LLM 호출 비용을 통제합니다.</p>
+      <p class="lead">이 화면은 단순 제출 게시판이 아니라, 참가자가 낸 <b>행동 지침 프롬프트를 서버가 동일 조건에서 재실행</b>하고 LLM 출력을 자동 파싱(정답 값 추출)해 정답과 비교한 뒤 리더보드에 반영하는 <b>비동기 자동채점 시스템</b>입니다. 운영자는 신청·수강·제출·채점·수상을 한 화면에서 관리하고 대규모 LLM 호출 비용을 통제합니다.</p>
     </div>
     <div class="card">
       <p class="cap">관리자 · 운영 기능</p>
@@ -584,53 +559,16 @@ MacroF1 = (1/|C|) · Σ<sub>c</sub> F1<sub>c</sub>
       <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
         <div class="ln"><span class="lk">억제</span>공식 3회·미리보기 50회 상한 · 큐 기반 비동기 · 예산 초과 시 대기/차단</div>
         <div class="ln"><span class="lk">배치</span>행당 1회 대신 <b>미니배치(5~10행)</b> 또는 30행 1회 JSON 배열 검토 — 비용↓, 출력형식 실패 리스크와 절충</div>
-        <div class="ln"><span class="lk">경량화</span>non-reasoning 소형 모델 · 프롬프트 캐싱(system 고정) · 동일 지침 중복 제거</div>
+        <div class="ln"><span class="lk">경량화</span>추론 없이 답만 출력하는(non-reasoning) 소형 모델 · 프롬프트 캐싱(고정 시스템 지시 재사용) · 동일 지침 중복 제거</div>
       </div>
     </div>
     <div class="card">
       <p class="cap">개발사 전달 핵심</p>
-      <p class="labdesc" style="margin:8px 0 0">단순 제출 게시판이 아니라, 참가자가 낸 <b>행동 지침 프롬프트를 서버가 동일 조건에서 재실행</b>하고 LLM 출력을 자동 파싱해 정답과 비교한 뒤 리더보드에 반영하는 <b>비동기 자동채점 시스템</b>입니다.</p>
+      <p class="labdesc" style="margin:8px 0 0">위 <b>비동기 자동채점 시스템</b>을 구축할 때 반드시 지킬 3가지입니다.</p>
       <div class="lbnote archnote" style="border-top:none;padding-top:8px;margin-top:12px">
         <div class="ln"><span class="lk">분리</span>웹 접수와 채점 워커를 분리(마감 폭주에도 접수 즉시 · 채점은 큐·워커)</div>
-        <div class="ln"><span class="lk">격리</span>비공개 데이터·ground_truth·API 키는 프론트/API에서 접근 불가(워커 전용)</div>
-        <div class="ln"><span class="lk">저장</span>제출 원문·LLM 원출력·파싱 결과·점수·score_version 모두 저장(재현·감사)</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 열린 결정 · 미송 논의 -->
-  <section>
-    <div class="shead"><span class="slabel">열린 결정</span><h2>미송님 논의 · 결정 필요 항목</h2>
-      <p class="lead">아래는 <b>주최측·미송 확정이 필요한 항목</b>입니다. 나머지 설계(배점·콘솔·채점)는 이 결정에 맞춰 조정됩니다.</p>
-    </div>
-    <div class="dgrid">
-      <div class="dcard">
-        <span class="dn">① 대회 의도</span>
-        <h4>능력 향상 vs 다양한 경험</h4>
-        <p>LLM 활용 능력을 <b>겨루는 대회</b>인가, 다양한 주제를 <b>경험</b>시키는 장인가. 문제 수·채점·난이도가 여기서 갈립니다.</p>
-      </div>
-      <div class="dcard">
-        <span class="dn">② 문제 수 · 채점</span>
-        <h4>1문제 vs 4주제</h4>
-        <p>출제안은 4개(조달 수요예측·입영 수요예측·드론 탐지·정비주기). <b>전부/일부/1개</b> 중 무엇을 풀고, 점수는 <b>합·평균·최고점</b> 중 무엇인지.</p>
-        <p class="lean">leaning · 일부 선택 + 문제별 난이도 배점(참여 유도)</p>
-      </div>
-      <div class="dcard">
-        <span class="dn">③ 리더보드/토탈 배점</span>
-        <h4>분리 점수 세부 배분</h4>
-        <p>리더보드 = 결과값 유효성 + 프롬프트 효율성 / 토탈 = + 수강·형식·보안. <b>각 항목 정확 배점</b> 확정 필요.</p>
-      </div>
-      <div class="dcard">
-        <span class="dn">④ 제출 형태</span>
-        <h4>단일 지침 vs 가이드형 다단계</h4>
-        <p>프롬프트 <b>한 장</b>(Shape A)인지, 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>(전처리→분석→구조화, Shape B)를 쓰게 할지.</p>
-        <p class="lean">leaning · 초급 친화 가이드형 다단계(주최측 Data_Sample 구조)</p>
-      </div>
-      <div class="dcard flaw">
-        <span class="dn">⑤ 데이터 결함</span>
-        <h4>라벨이 LLM에 쉽게 추론됨</h4>
-        <p>현재 정답 규칙은 단순 임계식이라 <b>컬럼만 붙여넣으면 LLM이 즉답</b> → 변별력 붕괴. 함정/재설계 필요.</p>
-        <p class="lean">방향 · 비선형 · 특성 상호작용 · 노이즈 · 숨긴 임계</p>
+        <div class="ln"><span class="lk">격리</span>비공개 데이터·정답셋(ground_truth)·API 키는 프론트/API에서 접근 불가(채점 워커 전용)</div>
+        <div class="ln"><span class="lk">저장</span>제출 원문·LLM 원출력·파싱 결과·점수·채점 버전(score_version) 모두 저장(재현·감사)</div>
       </div>
     </div>
   </section>
