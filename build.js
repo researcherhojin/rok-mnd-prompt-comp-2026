@@ -5,7 +5,7 @@ const fs = require('fs'), path = require('path')
 const root = __dirname
 const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8').replace(/\n$/, '')
 
-const TITLE = '설비 정비주기 예측형 — 자동채점·리더보드 설계'
+const TITLE = 'K-511 계통별 정비주기 예측형 — 자동채점·리더보드 설계'
 
 // CSS: tokens → base → (blank) → components  (원본 카스케이드 순서 보존)
 const css = read('src/styles/tokens.css')

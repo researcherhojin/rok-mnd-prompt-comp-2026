@@ -96,6 +96,24 @@
     "dgrid",
     "dcard",
     "pycache",
-    "sandboxed"
+    "sandboxed",
+    "hardcap",
+    "fscore",
+    "scikit",
+    "refdata",
+    "samp",
+    "cand",
+    "crosstab",
+    "Qwen",
+    "Mohapatra",
+    "LLMError",
+    "Pretendard",
+    "krw",
+    "Codex",
+    "numpy",
+    "pandas",
+    "autouse",
+    "monkeypatch",
+    "PERSP"
   ]
 }

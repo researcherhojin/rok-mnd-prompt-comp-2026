@@ -1,18 +1,18 @@
   <!-- 문제 · 데이터셋 -->
   <section>
     <div class="shead"><span class="slabel">문제 · 데이터셋</span><h2>예측 과제 및 데이터셋 정의 <span class="tbd">잠정 · 예시</span></h2>
-      <p class="lead">장비 유지보수 이력(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <b>샘플 데이터</b> 15행으로 규칙을 추론하고, 채점은 숨겨진 <b>비공개 데이터</b> 30행으로 이뤄집니다.<br><span class="dim">(30행은 설명·검증용 기준 — 실제 운영 시 리더보드 안정성·변별력을 위해 100~300행 확장 검토)</span></p>
+      <p class="lead">K-511 계열 군용 트럭의 <b>부품 계통별 정비 이력</b>(합성 데이터) 1건을 보고 <b>고장위험등급</b>과 <b>다음 정비주기 구간</b>을 분류합니다.<br>참가자는 공개된 <b>샘플 데이터</b> 10행으로 판단 방향을 잡고, 채점은 숨겨진 <b>비공개 데이터</b> Public 300행 / Private 700행으로 이뤄집니다.</p>
       <p class="note">※ 아래 <b>컬럼 구조·데이터 규모·수치·정답 규칙</b>은 설계 설명을 위한 <b>예시</b>이며, 주최측 확정 시 변경됩니다. (라벨 정의 자체는 설계안)</p>
     </div>
 
     <div class="card">
       <p class="cap">쉽게 이해하기</p>
-      <p class="plainexp">군 설비(발전기·전술차량·통신장비·레이더 등)는 갑자기 고장 나면 작전·훈련에 큰 차질을 줍니다. 그래서 고장 뒤 수리가 아니라 <b>징후를 미리 읽어 예방 정비</b>하는 것이 핵심이고, 그러려면 방대한 정비 이력을 판단해야 합니다.</p>
+      <p class="plainexp">K-511 계열 군용 트럭은 부품 계통(엔진·제동·전기 등)이 갑자기 고장 나면 수송·기동에 큰 차질을 줍니다. 그래서 고장 뒤 수리가 아니라 <b>징후를 미리 읽어 예방 정비</b>하는 것이 핵심이고, 그러려면 방대한 정비 이력을 판단해야 합니다.</p>
       <p class="plainexp">이 대회는 그 판단을 <b>LLM으로 자동화</b>합니다. 정비 이력을 보고 ① 곧 또 고장날 <b>위험이 얼마나 큰지</b>, ② <b>다음 정비를 언제</b> 해야 하는지를 분류하도록, 참가자가 <b>에이전트 행동 지침</b>을 설계하는 과제입니다.</p>
-      <p class="plainexp">참가자는 <b>코드를 작성하거나 정답 파일을 직접 제출하지 않습니다.</b> 대신 LLM이 데이터를 어떻게 읽고, 어떤 기준으로 판단하고, 어떤 형식으로 답할지를 설명하는 <b>행동 지침 프롬프트</b>를 씁니다 — 예컨대 "정비가 잦거나 가동시간이 길거나 최근에 고장났으면 위험을 높게 보라"처럼요. 그러면 채점 시스템이 그 지침을 <b>숨겨진 30건에 그대로 실행</b>해, 정답과 얼마나 일치하는지로 점수를 매깁니다.</p>
+      <p class="plainexp">참가자는 <b>코드를 작성하거나 정답 파일을 직접 제출하지 않습니다.</b> 대신 LLM이 데이터를 어떻게 읽고, 어떤 기준으로 판단하고, 어떤 형식으로 답할지를 설명하는 <b>행동 지침 프롬프트</b>를 씁니다 — 예컨대 "정비가 잦거나 가동시간이 길거나 최근에 고장났으면 위험을 높게 보라"처럼요. 그러면 채점 시스템이 그 지침을 <b>숨겨진 비공개 데이터에 그대로 실행</b>해, 정답과 얼마나 일치하는지로 점수를 매깁니다.</p>
       <p class="plainexp"><b>합성 데이터를 쓰는 이유 —</b> 실제 군 정비 데이터는 보안·반출 이슈가 있어, 정비 업무 구조를 <b>모사한 합성 데이터</b>를 씁니다. 군 장비 정비 맥락은 이해되되 <b>특정 부대·장비·작전 정보는 드러나지 않게</b> 설계합니다.</p>
       <div class="example">
-        <div class="ex-in"><span class="ex-k">예: 발전기 1대의 정비 기록</span>
+        <div class="ex-in"><span class="ex-k">예: K-511 엔진 계통의 정비 기록</span>
           <ul>
             <li>최근 1년 <b>6번</b> 정비 <span class="tagx">잦음</span></li>
             <li>누적 <b>4,200시간</b> 가동 <span class="tagx">많음</span></li>
@@ -32,8 +32,9 @@
       <div class="io">
         <div class="io-col"><span class="ex-k">입력 · Input</span>
           <div class="chips">
-            <span class="chip2">id</span><span class="chip2">장비유형</span><span class="chip2">수리 시작일</span><span class="chip2">수리 종료일</span><span class="chip2">정비 조치</span><span class="chip2">비용</span><span class="chip2">정비횟수<span class="dim">/1y</span></span><span class="chip2">가동시간</span><span class="chip2">직전고장 경과일</span>
+            <span class="chip2">id</span><span class="chip2">vehicle_id</span><span class="chip2">vehicle_model</span><span class="chip2">part_system</span><span class="chip2">operation_area</span><span class="chip2">mission_type</span><span class="chip2">load_condition</span><span class="chip2">observation_month</span><span class="chip2">repair_start_date</span><span class="chip2">repair_end_date</span><span class="chip2">maintenance_cost_krw</span><span class="chip2">last_maintenance_echelon</span><span class="chip2">emergency_repair_flag</span><span class="chip2">maintenance_count_1y</span><span class="chip2">days_since_last_maintenance</span><span class="chip2">mileage_total_km</span><span class="chip2">operation_hours_total</span><span class="chip2">vehicle_age_months</span><span class="chip2">part_age_months</span><span class="chip2">mileage_since_part_service_km</span><span class="chip2">hours_since_part_service</span><span class="chip2">days_since_last_fault</span><span class="chip2">spare_part_lead_time_days</span>
           </div>
+          <p class="dim" style="margin:8px 0 0;font-size:12px">id 포함 <b>23개 컬럼</b> · 부품 계통(part_system) 8종: 엔진·냉각·제동·전기·변속및구동·조향및현가·타이어및휠·차체및적재</p>
         </div>
         <div class="io-arrow" aria-hidden="true">→</div>
         <div class="io-col"><span class="ex-k">출력 · Output</span>
@@ -42,10 +43,10 @@
         </div>
       </div>
       <div class="spec">
-        <div class="row"><span class="k">샘플 데이터</span><span class="v"><code>sample.csv</code> 15행 — 입력 + 정답 <b>공개</b></span></div>
-        <div class="row"><span class="k">비공개 데이터</span><span class="v"><code>private.csv</code> 30행 — 입력·정답 <b>비공개</b>, 서버 보관</span></div>
+        <div class="row"><span class="k">샘플 데이터</span><span class="v"><code>sample.csv</code> 10행 — 입력 + 정답 <b>공개</b></span></div>
+        <div class="row"><span class="k">비공개 데이터</span><span class="v">Public 300행 / Private 700행 — 입력·정답 <b>비공개</b>, 서버 보관</span></div>
         <div class="row"><span class="k">평가 지표</span><span class="v">두 라벨 <b>Macro F1</b>의 평균 (아래 채점)</span></div>
-        <div class="row"><span class="k">정답 규칙</span><span class="v">설명용 규칙 제공 · 실제 규칙은 <b>참가자에게 비공개</b>·복합 조건 재설계</span></div>
+        <div class="row"><span class="k">정답 규칙</span><span class="v"><b>판단 관점</b>만 안내 · 실제 채점 규칙은 <b>참가자에게 비공개</b>·복합 조건</span></div>
       </div>
     </div>
 
@@ -53,40 +54,43 @@
       <p class="cap">샘플 데이터(sample.csv) 예시 · 4행</p>
       <div class="scroll">
         <table>
-          <thead><tr><th>id</th><th>장비</th><th>수리기간(일)</th><th>비용(원)</th><th>최근1년 정비(회)</th><th>누적가동(h)</th><th>직전고장(일 전)</th><th>→ 고장위험</th><th>→ 다음정비</th></tr></thead>
+          <thead><tr><th>id</th><th>부품 계통</th><th>운용지역</th><th>임무</th><th>누적가동(h)</th><th>부품정비후주행(km)</th><th>→ 고장위험</th><th>→ 다음정비</th></tr></thead>
           <tbody>
-            <tr><td class="mono">1</td><td>발전기</td><td class="mono">6</td><td class="mono">850,000</td><td class="mono">6</td><td class="mono">4,200</td><td class="mono">20</td><td><span class="lab high">HIGH</span></td><td class="mono">0-30</td></tr>
-            <tr><td class="mono">2</td><td>통신장비</td><td class="mono">2</td><td class="mono">120,000</td><td class="mono">1</td><td class="mono">1,500</td><td class="mono">140</td><td><span class="lab low">LOW</span></td><td class="mono">181+</td></tr>
-            <tr><td class="mono">3</td><td>전술차량</td><td class="mono">4</td><td class="mono">430,000</td><td class="mono">3</td><td class="mono">3,100</td><td class="mono">60</td><td><span class="lab med">MEDIUM</span></td><td class="mono">31-90</td></tr>
-            <tr><td class="mono">4</td><td>레이더</td><td class="mono">3</td><td class="mono">900,000</td><td class="mono">3</td><td class="mono">2,600</td><td class="mono">75</td><td><span class="lab med">MEDIUM</span></td><td class="mono">91-180</td></tr>
+            <tr><td class="mono">1</td><td>엔진</td><td>전방</td><td>기동</td><td class="mono">4,200</td><td class="mono">8,500</td><td><span class="lab high">HIGH</span></td><td class="mono">0-30</td></tr>
+            <tr><td class="mono">2</td><td>타이어및휠</td><td>후방</td><td>수송</td><td class="mono">1,500</td><td class="mono">2,100</td><td><span class="lab low">LOW</span></td><td class="mono">181+</td></tr>
+            <tr><td class="mono">3</td><td>제동</td><td>전방</td><td>기동</td><td class="mono">3,100</td><td class="mono">5,400</td><td><span class="lab med">MEDIUM</span></td><td class="mono">31-90</td></tr>
+            <tr><td class="mono">4</td><td>전기</td><td>후방</td><td>정비</td><td class="mono">2,600</td><td class="mono">3,800</td><td><span class="lab med">MEDIUM</span></td><td class="mono">91-180</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
     <div class="card">
-      <p class="labdesc" style="margin-bottom:16px">아래 규칙은 <b>설명용 예시</b>입니다. 실제 채점용 <b>비공개 데이터의 정답 생성 규칙은 그대로 공개하지 않으며</b>, 복합 조건·경계 케이스·노이즈로 변별력을 확보합니다.</p>
+      <p class="labdesc" style="margin-bottom:16px">정답을 정하는 정확한 임계값·수식은 <b>공개하지 않습니다.</b> 대신 참가자가 지침을 쓸 때 참고할 <b>판단 관점</b>(방향)을 아래에 안내합니다. 부품 계통별 특성·복합 조건·경계 사례가 섞여 있어, 컬럼 설명만 그대로 옮겨서는 고득점하기 어렵습니다.</p>
       <div class="lblpair">
         <div class="lblcol">
           <p class="cap">① 고장 위험 등급 · risk_grade</p>
-          <p class="labdesc"><b>가까운 시일 내 다시 고장 날 가능성</b>을 세 단계로.<br>정비가 잦고 오래 가동됐거나 최근 고장났을수록 높음.</p>
+          <p class="labdesc"><b>가까운 시일 내 다시 고장 날 가능성</b>을 세 단계로.</p>
           <div class="scroll"><table><tbody>
-            <tr><td><span class="lab high">HIGH</span></td><td>정비 ≥ 5회 <b>또는</b> 가동 ≥ 4000h <b>또는</b> 직전고장 ≤ 30일</td></tr>
-            <tr><td><span class="lab med">MEDIUM</span></td><td>HIGH·LOW 어디에도 해당하지 않음</td></tr>
-            <tr><td><span class="lab low">LOW</span></td><td>정비 ≤ 2회 <b>그리고</b> 가동 &lt; 2000h <b>그리고</b> 직전고장 &gt; 90일</td></tr>
+            <tr><td><span class="lab high">HIGH</span></td><td>정비가 잦고, 부품을 오래·많이 쓴 뒤이며, 최근에 고장이 있었던 계통일수록</td></tr>
+            <tr><td><span class="lab med">MEDIUM</span></td><td>위험 신호가 일부만 나타나 HIGH·LOW 사이로 보이는 경우</td></tr>
+            <tr><td><span class="lab low">LOW</span></td><td>정비가 드물고, 부품 사용이 적으며, 오랫동안 고장이 없던 계통일수록</td></tr>
           </tbody></table></div>
         </div>
         <div class="lblcol">
           <p class="cap">② 다음 정비 시점 · cycle_range</p>
-          <p class="labdesc"><b>다음 정비까지 두어도 되는 기간</b>을 네 구간으로.<br>위험이 클수록 더 빨리 정비해야 함.</p>
+          <p class="labdesc"><b>다음 정비까지 두어도 되는 기간</b>을 네 구간으로. 위험이 클수록 더 빨리.</p>
           <div class="scroll"><table><tbody>
-            <tr><td class="mono">0-30</td><td>30일 이내 재정비 · risk=HIGH</td></tr>
-            <tr><td class="mono">31-90</td><td>1~3개월 · MEDIUM &amp; 가동 ≥ 3000h</td></tr>
-            <tr><td class="mono">91-180</td><td>3~6개월 · MEDIUM &amp; 가동 &lt; 3000h</td></tr>
-            <tr><td class="mono">181+</td><td>6개월 초과 · risk=LOW</td></tr>
+            <tr><td class="mono">0-30</td><td>위험이 커 30일 안에 재정비가 필요한 계통</td></tr>
+            <tr><td class="mono">31-90</td><td>1~3개월 안에 점검이 필요한 계통</td></tr>
+            <tr><td class="mono">91-180</td><td>3~6개월 여유가 있는 계통</td></tr>
+            <tr><td class="mono">181+</td><td>위험이 낮아 6개월 넘게 여유가 있는 계통</td></tr>
           </tbody></table></div>
         </div>
       </div>
-      <div class="warn"><span class="wk">데이터 결함 · 재설계 필요</span>현재 규칙은 <b>설명용으로는 적합하나 실제 출제 규칙으로는 변별력이 부족</b>합니다. 참가자가 컬럼 설명·문제 조건을 그대로 LLM에 입력하면 고득점할 수 있으므로, 실제 비공개 채점셋은 <b>비선형 조건·특성 상호작용·경계 사례·일부 노이즈</b>를 포함해 <b>별도로 재설계</b>해야 합니다.</div>
+      <div class="spec" style="margin-top:16px">
+        <div class="row"><span class="k">라벨 분포 · risk_grade</span><span class="v"><span class="lab high">HIGH</span> 254 (25.4%) · <span class="lab med">MEDIUM</span> 535 (53.5%) · <span class="lab low">LOW</span> 211 (21.1%)</span></div>
+        <div class="row"><span class="k">라벨 분포 · cycle_range</span><span class="v"><code>0-30</code> 254 (25.4%) · <code>31-90</code> 256 (25.6%) · <code>91-180</code> 279 (27.9%) · <code>181+</code> 211 (21.1%)</span></div>
+      </div>
     </div>
   </section>

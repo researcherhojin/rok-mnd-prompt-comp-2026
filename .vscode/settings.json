@@ -1,5 +1,10 @@
 {
   "// 참고": "site/index.html·src/sections/06b-architecture.html은 build.js 생성물이며, 인라인 SVG(mermaid) 안 <style>을 CSS 분석기가 오탐(빈 룰셋·katex 참조 등)합니다. 브라우저 렌더는 정상이므로 HTML 내장 <style> 검증만 끕니다. 실제 CSS는 src/styles/*.css로 검증됩니다.",
   "html.validate.styles": false,
-  "css.lint.emptyRules": "ignore"
+  "css.lint.emptyRules": "ignore",
+  "// tailwind": "web/는 Tailwind v4 — @import \"tailwindcss\"·@theme 등은 표준 CSS 검사기가 모르는 at-rule이라 오탐. Tailwind IntelliSense가 별도 검증하므로 여기선 무시.",
+  "css.lint.unknownAtRules": "ignore",
+  "// python": "defense-prompt-grader는 uv .venv를 쓰는 하위 프로젝트. Pylance가 이 venv를 보게 해야 dotenv/httpx/sklearn/fastapi import 오탐이 사라진다. 경고 남으면 'Python: Select Interpreter'에서 이 경로 선택.",
+  "python.defaultInterpreterPath": "${workspaceFolder}/defense-prompt-grader/.venv/bin/python",
+  "python.analysis.extraPaths": ["${workspaceFolder}/defense-prompt-grader"]
 }

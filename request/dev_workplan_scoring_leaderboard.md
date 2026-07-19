@@ -15,7 +15,7 @@
 
 - **최종 하네스 형태:** Shape A(단일 행동 지침) vs Shape B(단계별 다중 프롬프트) — 채택안에 따라 제출 스키마·모델 호출 구조·채점 파이프라인·UI가 모두 달라짐
 - **최종 채점 모델** (경량 모델 후보 중 파일럿 후 확정)
-- **private 채점셋 행 수** (설명용 30행 → 운영 시 100~300행 확장 검토)
+- **private 채점셋 행 수** (설명용 Public 300 / Private 700 → 운영 시 확장 검토)
 - **리더보드 점수 / 토탈 점수 배점** (분리 구조의 각 항목 정확 배점)
 - **프롬프트 효율성 반영 방식** (보조 지표 vs 동점 처리 vs 소배점)
 - **미리보기·공식 제출 횟수** (샘플 실행 ~50/일 · 공식 3/일)
@@ -27,11 +27,12 @@
 
 | 용도 | 모델 | 파라미터 |
 |---|---|---|
-| **공식 채점** | 경량 모델 우선 검토 (예: `gpt-4.1-nano`, `gpt-4o-mini` 등) | `temperature=0` · 가능 시 `seed` 고정 · 작은 `max_output_tokens` · tools 없음 |
+| **공식 채점** | 경량 모델 우선 검토 (예: `gpt-4o-mini`, `gpt-4.1-nano` 등) | `temperature=0` · `seed` 고정(예: 42) · 작은 `max_output_tokens` · tools 없음 |
 | **미리보기** | 공식 채점과 **동일 모델** 권장 | 공식 채점과 최대한 동일 |
-| **개발/테스트** | mock 모델 또는 고정 응답 | 회귀 테스트·비용 절감용 |
+| **개발/테스트** | LLM 경계(HTTP 호출)를 고정 응답 스텁으로 대체 | 회귀 테스트·비용 절감용 (별도 mock 모델 경로 없음) |
 
 - 실제 운영 모델은 **비용·응답 속도·출력 안정성·파싱 성공률**을 기준으로 최종 확정한다.
+- ⚠️ **모델이 점수 천장을 결정한다(실측).** 동일 규칙 인코딩 프롬프트가 소형(nano) ≈35 / mini ≈54 / 상위(gpt-5.4급) ≈80. 소형·`max_tokens=50`·정답-only에서는 완벽한 규칙을 줘도 다분기 실행이 안 돼 상한이 낮다 → 대회 변별력을 위해선 모델 급을 함께 결정해야 한다(참고 프롬프트·실측 → `reference_prompts.md`).
 - 모델은 config 값(`SCORING_MODEL`)으로 관리하고 **코드에 하드코딩하지 않는다**. 정확도 부족 시 `gpt-4o-mini`·`gpt-4.1-mini` 등으로 승급 검토.
 - 모든 참가자의 공식 제출은 **동일 모델·동일 파라미터·동일 하네스** 조건에서 실행한다.
 - 채점 시점의 **모델명·모델 버전·파라미터·`score_version`**을 저장한다.
@@ -67,11 +68,11 @@ flowchart LR
 각 비공개 데이터 레코드를 **raw JSON 1줄**로 직렬화. 파생값(수리기간 등)은 **만들지 않음** — 파생은 지침이 결정.
 ```python
 def serialize(row) -> str:
-    return json.dumps(row, ensure_ascii=False)   # {"id":1,"equipment_type":"발전기",...}
+    return json.dumps(row, ensure_ascii=False)   # {"id":1,"vehicle_model":"K-511","part_system":"엔진","operation_area":"전방",...}
 ```
 
 ### 3.2 모델 호출 (OpenAI API) — 캐싱·재시도·예산
-**주입 방식(권장): system = 참가자 지침, user = 레코드.** 지침이 30행 내내 동일하므로 **프롬프트 캐싱**으로 입력비가 급감(캐시 입력 $0.02/1M). (`{{input}}` 인라인 치환도 가능하나 캐싱 효율↓)
+**주입 방식(권장): system = 참가자 지침, user = 레코드.** 지침이 전체 채점 행 내내 동일하므로 **프롬프트 캐싱**으로 입력비가 급감(캐시 입력 $0.02/1M). (`{{input}}` 인라인 치환도 가능하나 캐싱 효율↓)
 
 ```python
 def run_agent(instruction: str, row: dict) -> str:
@@ -128,7 +129,7 @@ avg_f1 = (macro_f1(risk_true, risk_pred, ALLOWED_RISK)
 
 **② 결과 신뢰성(25) — 정답 없이 판정**
 ```python
-def reliability(preds) -> float:                  # preds = [(risk, cycle), ...] 30개
+def reliability(preds) -> float:                  # preds = [(risk, cycle), ...] 채점 행 수만큼
     # ⓐ 분포 건전성: 어느 한 라벨도 임계(잠정 0.8) 초과 점유 금지
     dom = max(label_share(preds))                 # 최다 라벨 점유율
     dist_health = 1.0 if dom <= 0.8 else max(0.0, (1 - dom)/0.2)
@@ -147,8 +148,8 @@ def data_util(preds, gt) -> float:
 
 **④ 커버리지(10)/제출규격(5)**
 ```python
-coverage = 10 * (covered_rows / 30)               # 유효 예측(빠짐·빈값 0) 비율
-format_  = 5 * (contract_rows / 30)               # 출력 계약(한 줄·콤마·허용 라벨) 준수 비율
+coverage = 10 * (covered_rows / total_rows)       # 유효 예측(빠짐·빈값 0) 비율
+format_  = 5 * (contract_rows / total_rows)        # 출력 계약(한 줄·콤마·허용 라벨) 준수 비율
 ```
 
 **게이트 (점수 밖):** 수강률(VOD 미충족 → 제출 차단) · 보안(`no_forbidden` 위반 → `review_flag` + 실격). 정규식: 주민번호·전화·실명·군보안·금지어. 점수화하지 않음.
@@ -197,22 +198,22 @@ def prompt_efficiency(chars: int, c_min=300, c_max=3000) -> float:
 def score_submission(sub):
     inst = sub.instruction
     if not vod_ok(sub.participant): reject(sub, "수강 미충족"); return   # 게이트
-    # 프로토타입: 행당 1회 호출 / 운영: 미니배치(5~10행) 또는 일괄 호출로 교체
+    # 프로토타입: 행당 1회 호출 / 운영: 미니배치(10행)로 교체
     runs, preds = [], []
-    for batch in make_batches(PRIVATE_ROWS, size=BATCH_SIZE):   # BATCH_SIZE=1(프로토타입)~30(운영)
+    for batch in make_batches(PRIVATE_ROWS, size=BATCH_SIZE):   # BATCH_SIZE=1(프로토타입)~10(운영 미니배치)
         raw = run_agent(inst, batch)
         runs.append(raw); preds.extend(parse_batch(raw))       # 배치 파싱
     save_model_runs(sub.id, PRIVATE_ROWS, runs, preds)
     if has_forbidden(inst, runs): flag(sub, "SECURITY")     # 게이트: 실격 후보
     # Public/Private 분리 채점
     for split in ("PUBLIC","PRIVATE"):
-        gt = ground_truth(split)                            # 12 / 18행
+        gt = ground_truth(split)                            # Public 300 / Private 700행
         avg_f1 = mean_macro_f1(preds, gt)
         total = 40*avg_f1 + reliability(preds) + data_util(preds, gt) + coverage(preds) + format_(preds)
         ...
     save_scores(sub.id, ...); mark(sub, "SCORED")
 ```
-- **호출 단위:** 프로토타입은 **행당 1회**로 구현해도 되지만, 1만 명 규모에서는 비용·처리량 리스크가 크므로 **운영에서는 5~10행 미니배치 또는 30행 일괄 호출을 반드시 비교**한다(§8·기획서 §7.1). 일괄 호출은 일부 행 파싱 실패 시 해당 행만 무효 처리하거나 배치 재시도.
+- **호출 단위:** 프로토타입은 **행당 1회**로 구현해도 되지만, 1만 명 규모에서는 비용·처리량 리스크가 크므로 **운영에서는 10행 미니배치 또는 대량 일괄 호출을 반드시 비교**한다(§8·기획서 §7.1). 일괄 호출은 일부 행 파싱 실패 시 해당 행만 무효 처리하거나 배치 재시도.
 - **멱등:** 동일 제출 재채점 = 저장된 원출력 기준 동일 점수(원출력 재사용). 재채점은 overwrite + `audit_log`.
 
 ---
@@ -249,7 +250,7 @@ def update_leaderboard(at):                                 # 점수 반영: 제
 | `scoring_jobs` | submission_id, status, attempts, error_message | 비동기 채점 작업(큐) |
 | `model_runs` | submission_id, row_id, raw_output(URI), parsed_risk, parsed_cycle | LLM 실행 원출력·파싱 결과 |
 | `scores` | f1_risk, f1_cycle, avg_f1_public/private, reliability, data_util, coverage, format, leaderboard_score, total_public/private, **score_version** | 점수 저장(배점 버전 구분) |
-| `ground_truth` | risk_grade, cycle_range, split(PUBLIC/PRIVATE) | 정답셋(워커 격리) |
+| `ground_truth` | risk_grade, cycle_range, split(PUBLIC/PRIVATE) | 정답셋(워커 격리) · Public 300 / Private 700 |
 | `leaderboard_snapshots` | rank, tier, percentile, submit_count, snapshot_at | 리더보드 표시 |
 | `api_budget` | date, model, calls, cost, cache_hits | 비용·예산 통제 |
 | `review_flags` · `audit_log` | 검수 플래그 · 재채점/변경 이력 | 부정·감사 대응 |
@@ -282,11 +283,11 @@ def update_leaderboard(at):                                 # 점수 반영: 제
 
 | # | 작업 | 완료조건(AC) |
 |---|---|---|
-| M1 | **데이터·정답셋 생성** (sample 15/private 30/ground_truth, 규칙 스크립트) | 규칙 재실행 시 동일 정답 재현 · 라벨 분포 확인 |
+| M1 | **데이터·정답셋 생성** (sample 10 / Public 300 / Private 700 / ground_truth, 규칙 스크립트) | 규칙 재실행 시 동일 정답 재현 · 라벨 분포 확인 |
 | M2 | **채점 엔진(오프라인)** — §3 전체 | 골드셋 5케이스 기대 총점 일치(회귀 통과) |
-| M3 | **모델 연동** — OpenAI API·캐싱·재시도·예산 | 30행 1제출 채점 <수초 · 캐시 적중률 로깅 |
+| M3 | **모델 연동** — OpenAI API·캐싱·재시도·예산 | 1제출(Public 300 / Private 700) 채점 시간 측정 · 캐시 적중률 로깅 |
 | M4 | **제출 서비스** — 스키마·3000자·1일3회·큐 | 잘못된 제출 정확 반려(횟수 미차감) |
-| M5 | **미리보기** — 샘플 데이터 5행·1일50회 rate limit | 비공개 데이터 미접근 검증 · 캐시 동작 |
+| M5 | **미리보기** — 샘플 데이터 10행·1일50회 rate limit | 비공개 데이터 미접근 검증 · 캐시 동작 |
 | M6 | **리더보드** — §4 | 스냅샷·백분위·본인뷰 · 점수 반영 수 분 내 · 공개 수준 전환 배치 |
 | M7 | **관리자 콘솔** — 현황·검수·재채점·API 예산·엑셀 | model_runs 열람·재채점 멱등 |
 | M8 | **부하·비용·파일럿** | 예상 동시 500 부하 · 일 예산 시뮬 · 내부 전과정 리허설 |
@@ -301,16 +302,16 @@ def update_leaderboard(at):                                 # 점수 반영: 제
 
 | 항목 | 호출/일(최악) | 입력비 | 출력비 | 일 합계(최악) |
 |---|---|---|---|---|
-| 공식 채점 (1만×3×30행) | 900,000 | 720M×$0.10=$72 | 90M×$0.40=$36 | **$108/일** |
-| 미리보기 (1만×50×5행) | 2,500,000 | 2000M×$0.10=$200 | 250M×$0.40=$100 | **$300/일** |
+| 공식 채점 (1만×3×1000행) | 30,000,000 | 24,000M×$0.10=$2,400 | 3,000M×$0.40=$1,200 | **$3,600/일** |
+| 미리보기 (1만×50×10행) | 5,000,000 | 4,000M×$0.10=$400 | 500M×$0.40=$200 | **$600/일** |
 
 - **이는 "모두가 매일 상한까지" 최악치.** 실제는 참여 곡선상 훨씬 낮음.
 - **비용 통제 (필수):**
-  1. **프롬프트 캐싱** — system=지침 고정 → 30행 중 29행 캐시 입력($0.02/1M). 입력비 **~60–80%↓**.
+  1. **프롬프트 캐싱** — system=지침 고정 → 첫 호출 외 대부분 캐시 입력($0.02/1M). 입력비 **~60–80%↓**.
   2. **동일 지침 중복 제거** — 미리보기·재제출 캐시 재사용.
-  3. **미리보기 억제** — 샘플 5행·1일 50회 rate limit·일 예산 상한.
+  3. **미리보기 억제** — 샘플 10행·1일 50회 rate limit·일 예산 상한.
   4. **행당 1회**(분산 크면 k=3, 비용 3×).
-- 캐싱 적용 시 공식 채점 실질 **~$40–70/일 이하**로 추정. 대회 기간(약 1개월) 총액은 **일 예산 상한**으로 확정.
+- 캐싱 적용 시 공식 채점 실질 **~$1,700–2,200/일 이하**로 추정. 대회 기간(약 1개월) 총액은 **일 예산 상한**으로 확정.
 
 > **협의:** 예상 참여율(동시성 곡선)·일 예산 상한·미리보기 횟수(50 유지 여부)를 정하면 총 비용이 확정된다.
 

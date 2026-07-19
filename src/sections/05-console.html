@@ -15,7 +15,7 @@
 3
 4
 5</pre>
-        <pre class="code">너는 국방 설비 정비 분석가다.
+        <pre class="code">너는 K-511 계열 군용 트럭의 부품 계통별 정비 분석가다.
 아래 정비 이력을 보고 고장위험등급과
 다음 정비주기를 판단하라.
 입력: <span class="ph">{{input}}</span>
@@ -33,25 +33,25 @@
           <table>
             <thead><tr><th>#</th><th>입력 (요약)</th><th>기대 정답</th><th>에이전트 출력</th><th>판정</th></tr></thead>
             <tbody>
-              <tr><td class="mono">1</td><td>발전기 · 정비6 · 4,200h</td><td class="mono">HIGH, 0-30</td><td class="mono">HIGH, 0-30</td><td><span class="pill pass">통과</span></td></tr>
-              <tr><td class="mono">2</td><td>통신장비 · 정비1 · 1,500h</td><td class="mono">LOW, 181+</td><td class="mono">LOW, 181+</td><td><span class="pill pass">통과</span></td></tr>
-              <tr><td class="mono">3</td><td>전술차량 · 정비3 · 3,100h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 31-90</td><td><span class="pill pass">통과</span></td></tr>
-              <tr><td class="mono">4</td><td>레이더 · 정비3 · 2,600h</td><td class="mono">MEDIUM, 91-180</td><td class="mono">MEDIUM, 91-180</td><td><span class="pill pass">통과</span></td></tr>
-              <tr><td class="mono">5</td><td>화포 · 정비4 · 3,300h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 0-30</td><td><span class="pill fail">실패</span></td></tr>
+              <tr><td class="mono">1</td><td>엔진 · 전방 · 4,200h</td><td class="mono">HIGH, 0-30</td><td class="mono">HIGH, 0-30</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">2</td><td>타이어및휠 · 후방 · 1,500h</td><td class="mono">LOW, 181+</td><td class="mono">LOW, 181+</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">3</td><td>제동 · 전방 · 3,100h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 31-90</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">4</td><td>전기 · 후방 · 2,600h</td><td class="mono">MEDIUM, 91-180</td><td class="mono">MEDIUM, 91-180</td><td><span class="pill pass">통과</span></td></tr>
+              <tr><td class="mono">5</td><td>변속및구동 · 전방 · 3,300h</td><td class="mono">MEDIUM, 31-90</td><td class="mono">MEDIUM, 0-30</td><td><span class="pill fail">실패</span></td></tr>
             </tbody>
           </table>
         </div>
         <div class="res-foot">완전일치 <span class="okk">4 / 5행</span> · 평균 F1 <span class="okk">0.92</span> <span style="color:var(--muted);font-weight:500;font-size:13px">— 두 라벨 Macro F1 평균 · 숨겨진 비공개 데이터 채점과 다를 수 있음</span></div>
       </div>
     </div>
-    <p class="note">[샘플 실행]은 정답이 공개된 샘플 데이터로 즉시 결과를 보여주고, [제출]만 숨겨진 비공개 데이터 30행으로 공식 채점됩니다.</p>
+    <p class="note">[샘플 실행]은 정답이 공개된 샘플 데이터로 즉시 결과를 보여주고, [제출]만 숨겨진 비공개 데이터(Public 300행 / Private 700행)로 공식 채점됩니다.</p>
     <p class="note"><b>제출 내역</b> — 공식 제출별 <b>상태·제출 시각·점수·파싱 성공 여부·리더보드 반영</b>을 확인합니다. 상태: 채점 대기 · 채점 중 · 채점 완료 · 검토 필요 · 실패.</p>
     <div class="warn"><span class="wk">참가 환경</span>사지방(PC) 대신 <b>핸드폰</b> 위주 · 갑작스런 중단 대비 <b>세션 지속·백그라운드 저장</b> 필수.<br>초급 친화를 위해 하네스가 단계를 고정하고 <b>노드별 프롬프트</b>를 쓰게 하는 <b>가이드형 다단계</b>(Shape B)도 검토 중입니다.</div>
     <div class="card" style="margin-top:16px">
       <p class="cap">LLM 질문 도우미 <span class="tbd">선택 · 검토 중</span></p>
       <p class="labdesc" style="margin:8px 0 0">VOD 개념·데이터 컬럼 의미·프롬프트 작성 방향을 질문할 수 있습니다. 단, 문제 <b>정답을 직접 요구</b>하거나 <b>비공개 데이터 예측을 대신 시키는</b> 질문은 차단합니다(사용 로그·토큰 기록). 챗봇 탑재 시 서비스 범위·비용·필터링 정책이 달라지므로 개발 범위 결정 필요.<br><b>학습·이해를 돕는 기능이며 공식 채점에 직접 관여하지 않습니다.</b> 사용 로그는 운영·보안 목적으로 저장하고, <b>실제 군사정보·개인정보 입력은 금지</b>합니다.</p>
       <div class="adlist">
-        <div class="a"><span class="mk">허용</span><span>"Macro F1이 무엇인가요?" · "정비횟수·가동시간은 어떤 의미인가요?" · "출력 형식을 지키려면 어떻게 쓰나요?"</span></div>
+        <div class="a"><span class="mk">허용</span><span>"Macro F1이 무엇인가요?" · "part_system·부품정비후주행은 어떤 의미인가요?" · "출력 형식을 지키려면 어떻게 쓰나요?"</span></div>
         <div class="d"><span class="mk">제한</span><span>"이 문제 정답 프롬프트를 써줘" · "비공개 데이터에서 HIGH 나올 조건 알려줘" · "내 점수 최대화 프롬프트 대신 만들어줘"</span></div>
       </div>
     </div>
