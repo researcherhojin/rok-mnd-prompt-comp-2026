@@ -24,5 +24,8 @@ data/public.csv
 data/private.csv
 data/all.csv
 
+# 콘솔 화면 캡처(로컬 재생성 가능·대용량 PNG) — 저장소 제외
+snap/
+
 # OS
 .DS_Store
