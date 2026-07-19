@@ -34,6 +34,27 @@ npx wrangler pages deploy site --project-name=rmpc-2026-23aded --branch main --c
 
 Production URL `https://rmpc-2026-23aded.pages.dev`. Cloudflare Access (email-gated) is the intended lock; until it's set the page is public but noindex.
 
+## defense-prompt-grader — commands & layout
+
+Self-contained uv project (Python 3.12); all commands run from `defense-prompt-grader/`. Its `Makefile` is the entry point:
+
+```bash
+make dev        # uv run uvicorn api.main:app --reload --port 8080   (API + 웹 콘솔 백엔드)
+make test       # uv run pytest -q
+make cli        # uv run grader run --prompt baselines/P1.txt --split public --runs 1
+make web        # cd web && npm run dev      (Vite dev server)
+make web-build  # cd web && npm run build    (tsc && vite build → web/dist)
+
+uv run pytest tests/test_score.py::test_name -q   # 단일 테스트
+uv run ruff check . && uv run ruff format .       # lint/format (config: repo root ruff.toml)
+```
+
+CLI flags (`grader run`): `--prompt` (필수, 텍스트 파일) · `--split sample|public|private` · `--runs 1|2|3` · `--model` (`.env`의 `LLM_MODEL` override) · `--force` (캐시 무시).
+
+Pipeline module map — `grader/`: `config.py` (`.env` 로드, 라벨 순서·`CHAR_HARDCAP=3000`·`SPLIT_FILES`·`LLMConfig` seed 42/temp 0/`max_tokens=50`) → `data.py` (CSV 로드) → `template.py` (프롬프트 합성) → `llm.py` (OpenAI-호환 호출, `max_completion_tokens`↔`max_tokens` 폴백) → `parse.py` → `score.py` (두 Macro F1 평균) — `runner.py`가 오케스트레이션(행별 async, 실패율 5% 초과 시 `RunAborted`, `cache.py` SQLite 캐시). `api/main.py`는 제출/실행/취소/진행률/리더보드 REST, `api/store.py`가 `submissions.db`. `web/`은 React 19 + Vite + Tailwind 4 + react-router 콘솔.
+
+**`.env`가 필요**(`LLM_BASE_URL`/`LLM_API_KEY`/`LLM_MODEL`/`MAX_CONCURRENCY`) — gitignored. `cache.db`·`submissions.db`는 로컬 산출물.
+
 ## Diagrams & Playwright tooling
 
 Two kinds of Mermaid, validated/rendered the same way (mermaid + a headless Chromium via Playwright):
@@ -41,11 +62,12 @@ Two kinds of Mermaid, validated/rendered the same way (mermaid + a headless Chro
 - **`request/*.md` embed 10 Mermaid blocks** (brief 2 · spec 6 · arch 1 · workplan 1). A syntax error renders as a broken block on GitHub, so **validate every ` ```mermaid ` block with the real parser before committing.** ASCII box-diagrams were converted to Mermaid — keep it that way.
 - **`src/sections/06b-architecture.html` embeds a pre-rendered inline `<svg id="archsvg">`** — the *only* diagram baked as SVG (so the static page needs no CDN mermaid.js). **Never hand-edit that SVG**: re-render from a `flowchart TB` source and splice the whole `<svg id="archsvg">…</svg>` block back (a longer node label changes the fixed box width, so hand-edits overflow).
 
-Shared tooling for all three tasks below: `npm i mermaid` into the scratchpad, and drive the sandboxed Playwright already on this machine — `playwright-core` under `~/.npm/_npx/*/node_modules/`, chromium at `~/Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-mac-arm64/chrome-headless-shell`.
+Shared tooling for all the tasks below: `npm i mermaid` into the scratchpad, and drive the sandboxed Playwright already on this machine — `playwright-core` under `~/.npm/_npx/*/node_modules/`, chromium at `~/Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-mac-arm64/chrome-headless-shell`.
 
 - **Validate:** `await mermaid.parse(block)` per block (throws on error).
 - **Re-render 06b:** `mermaid.initialize({theme:'base', themeVariables:{primaryColor:'#eef2f8', primaryBorderColor:'#1c4270', primaryTextColor:'#191f28', lineColor:'#8195ad', fontFamily:'-apple-system,BlinkMacSystemFont,…'}})` → `mermaid.render('archsvg', src)` (keep the `archsvg` id so the wrapper CSS applies), then replace the SVG block in the html.
 - **Overflow check (required before any `site/` deploy):** load `site/index.html` at 320/360/390/768/1180 and assert `documentElement.scrollWidth <= clientWidth`. Long unbreakable tokens (e.g. filenames in the footer) are the usual culprit → fix with `overflow-wrap:anywhere`, not by shortening claims.
+- **Console screen capture → `snap/`:** the grader console's 9 screens (`/` · `/data` · `/evaluation` · `/rules` · `/submit` ×2 · `/leaderboard` · `/detail/:id` · `/ops`) captured at 1440×900, `deviceScaleFactor 2`, `fullPage`, asserting the same `scrollWidth <= clientWidth` per screen. Boot both servers first (`make dev` + `make web`). **Fill the 제출 form but never click 제출하고 채점 시작** — submitting spends real LLM calls; the 리더보드·상세 screens already render from the existing rows in `submissions.db`, so a full capture pass costs zero API calls. `snap/` is gitignored (regenerable, ~4MB of PNG).
 
 ## The designed system (what the docs describe)
 

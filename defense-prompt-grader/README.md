@@ -79,6 +79,10 @@ make web            # 터미널 2: 프론트 (5173, /api → 8080 프록시)
 - **상세**: risk·cycle 축별 혼동행렬 히트맵·클래스별 P/R/F1, 결합 Macro F1, n_runs 변동성, 오답·INVALID 행 인스펙터(원문 응답), 프롬프트 접기.
 - 라벨 색상: risk HIGH=적·MEDIUM=호박·LOW=녹 / cycle 0-30=적·31-90=호박·91-180=남색·181+=녹 · INVALID=회색. 숫자 tabular-nums.
 
+### 화면 캡처
+
+두 서버를 띄운 상태에서 headless Chromium으로 9개 화면(`/` · `/data` · `/evaluation` · `/rules` · `/submit` 초기·작성 후 · `/leaderboard` · `/detail/:id` · `/ops`)을 1440×900 전체 페이지로 캡처해 상위 repo `snap/`에 저장한다(git 미추적·재생성 가능). 캡처 절차는 `CLAUDE.md` §Diagrams & Playwright tooling 참조. 리더보드·상세는 `submissions.db`의 기존 제출을 그대로 렌더하므로 **제출 버튼을 누르지 않으면 LLM 호출 0회**로 전 화면을 얻는다.
+
 ## 테스트
 
 ```bash
