@@ -1,0 +1,1 @@
+K-511 계열 군용 트럭의 부품 계통별 정비 이력을 보고 각 행의 고장위험등급과 다음 정비주기 구간을 예측하세요. risk_grade는 HIGH, MEDIUM, LOW 중 하나, cycle_range는 0-30, 31-90, 91-180, 181+ 중 하나로 정합니다. 각 행마다 "risk_grade, cycle_range" 한 줄로만 출력하세요. 예: HIGH, 0-30

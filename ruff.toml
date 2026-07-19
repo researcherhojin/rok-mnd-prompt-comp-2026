@@ -1,0 +1,3 @@
+# B/organizer_bundle_*는 주최측이 데이터를 생성한 스크립트(재현용 원본).
+# 우리 소스가 아니므로 lint 제외 — 리포맷 금지, 있는 그대로 보존.
+extend-exclude = ["B/"]

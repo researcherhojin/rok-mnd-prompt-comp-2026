@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* ── 디자인 시스템 A · 디펜스-옵스 콘솔 ────────────────────────────────
+   그래파이트/차콜 산업 뉴트럴 + 단일 시그널 액센트(탈채도 시안).
+   semantic(적/호박/녹)은 액센트와 분리 — 위험 라벨 전용. */
+@theme {
+  --font-sans: "Pretendard", system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+
+  /* 뉴트럴 — 쿨 그래파이트. 3단 elevation: canvas(회색) < raise(카드 내부 inset) < card(흰색) */
+  --color-canvas: #e6e9ef;
+  --color-card: #ffffff;
+  --color-raise: #eef1f5;
+  --color-ink: #14181f;
+  --color-sub: #454c57;
+  --color-muted: #828a95;
+  --color-line: #dde1e8;
+
+  /* 액센트 — 시그널 시안(옵스/레이더) */
+  --color-accent: #0e6c7a;
+  --color-accent-deep: #0a5461;
+  --color-accent-soft: #dcecef;
+
+  /* semantic — 산업 톤 */
+  --color-ok: #12a069;
+  --color-ok-deep: #0b7c50;
+  --color-ok-soft: #e1f3ea;
+  --color-bad: #d83a48;
+  --color-bad-soft: #fbe9eb;
+  --color-warn: #c47f1e;
+  --color-warn-soft: #f8efdd;
+
+  --radius-card: 14px;
+  --radius-ctl: 10px;
+}
+
+:root {
+  color-scheme: light;
+  --shadow: 0 1px 2px rgba(16, 23, 33, 0.05), 0 4px 16px rgba(16, 23, 33, 0.06);
+  --mono: ui-monospace, "SF Mono", Menlo, "Cascadia Code", Consolas, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.break-anywhere {
+  overflow-wrap: anywhere;
+}
+.mono {
+  font-family: var(--mono);
+}
+
+/* 키보드 포커스 — 전역 접근성 */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── 재사용 컴포넌트 클래스 ─────────────────────────────── */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--radius-ctl);
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, transform 0.05s ease;
+}
+.btn:disabled {
+  cursor: not-allowed;
+}
+.btn:not(:disabled):active {
+  transform: translateY(0.5px);
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-primary:not(:disabled):hover {
+  background: var(--color-accent-deep);
+}
+.btn-primary:disabled {
+  background: var(--color-line);
+  color: var(--color-muted);
+}
+
+.btn-ghost {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+.btn-ghost:not(:disabled):hover {
+  background: color-mix(in srgb, var(--color-accent-soft) 82%, var(--color-accent) 18%);
+}
+.btn-ghost:disabled {
+  background: var(--color-line);
+  color: var(--color-muted);
+}
+
+.inp {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-ctl);
+  background: var(--color-card);
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.inp::placeholder {
+  color: var(--color-muted);
+}
+.inp:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}

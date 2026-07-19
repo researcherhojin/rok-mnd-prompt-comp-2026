@@ -19,5 +19,10 @@
 # 주최측 원본 문서·교육자료(민감·대용량) — 로컬 보관, 저장소 제외
 docs/
 
+# 비공개 정답 키(라벨 인라인) — 로컬 보관, 저장소 제외. 참가자 공개 sample.csv만 추적.
+data/public.csv
+data/private.csv
+data/all.csv
+
 # OS
 .DS_Store
