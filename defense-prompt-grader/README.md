@@ -35,6 +35,7 @@ MAX_CONCURRENCY=8
 | 모델 | prediction_score |
 |---|---|
 | `gpt-4o-mini` | 0.1766 |
+| `gpt-4.1-nano` | 0.3131 |
 | `gpt-5.4-nano` | 0.35 |
 | `gpt-5.4-mini` | 0.54 |
 | `gpt-5.4` | 0.81 |
