@@ -38,7 +38,14 @@ class Store:
         return conn
 
     def create(
-        self, name, split, model, runs, prompt, is_baseline=False, status="pending",
+        self,
+        name,
+        split,
+        model,
+        runs,
+        prompt,
+        is_baseline=False,
+        status="pending",
         affiliation=None,
     ) -> int:
         with self._conn() as c:
@@ -47,8 +54,20 @@ class Store:
                 " (name, affiliation, created_at, split, model, runs, prompt, prompt_len,"
                 "  is_baseline, status, error_msg, result_json)"
                 " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-                (name, affiliation, _now(), split, model, runs, prompt, len(prompt),
-                 int(is_baseline), status, None, None),
+                (
+                    name,
+                    affiliation,
+                    _now(),
+                    split,
+                    model,
+                    runs,
+                    prompt,
+                    len(prompt),
+                    int(is_baseline),
+                    status,
+                    None,
+                    None,
+                ),
             )
             return int(cur.lastrowid)
 

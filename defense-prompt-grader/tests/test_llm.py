@@ -49,10 +49,16 @@ def test_token_param_fallback_to_max_tokens():
     def handler(request):
         body = _json.loads(request.content)
         if "max_completion_tokens" in body:
-            return httpx.Response(400, json={"error": {
-                "message": "Unsupported parameter: 'max_completion_tokens' is not supported.",
-                "code": "unsupported_parameter", "param": "max_completion_tokens",
-            }})
+            return httpx.Response(
+                400,
+                json={
+                    "error": {
+                        "message": "Unsupported parameter: 'max_completion_tokens' is not supported.",
+                        "code": "unsupported_parameter",
+                        "param": "max_completion_tokens",
+                    }
+                },
+            )
         assert "max_tokens" in body
         return _ok_response()
 
@@ -61,7 +67,9 @@ def test_token_param_fallback_to_max_tokens():
 
 def test_non_retryable_4xx_raises_llmerror_with_detail():
     def handler(request):
-        return httpx.Response(401, json={"error": {"message": "bad key", "code": "invalid_api_key"}})
+        return httpx.Response(
+            401, json={"error": {"message": "bad key", "code": "invalid_api_key"}}
+        )
 
     with pytest.raises(llm.LLMError) as ei:
         asyncio.run(_call(handler))

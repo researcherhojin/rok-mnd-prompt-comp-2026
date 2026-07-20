@@ -61,6 +61,4 @@ def load_split(name: str) -> list[dict[str, str]]:
 def load_answers(name: str) -> dict[str, dict[str, str]]:
     """id → {"risk_grade", "cycle_range"}. data/는 라벨이 각 split 파일에 인라인. 백엔드 전용."""
     rows = _read_csv(config.data_dir() / config.SPLIT_FILES[name])
-    return {
-        r["id"]: {"risk_grade": r["risk_grade"], "cycle_range": r["cycle_range"]} for r in rows
-    }
+    return {r["id"]: {"risk_grade": r["risk_grade"], "cycle_range": r["cycle_range"]} for r in rows}

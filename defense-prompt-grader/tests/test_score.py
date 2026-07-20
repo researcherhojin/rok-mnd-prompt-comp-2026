@@ -66,6 +66,4 @@ def test_invalid_counts_as_false_negative_not_dropped():
 def test_macro_f1_labels_arg():
     # 전 클래스가 등장하고 모두 정답이면 결합 macro = 1.0
     assert macro_f1(["HIGH", "MEDIUM", "LOW"], ["HIGH", "MEDIUM", "LOW"], RISK_LABELS) == 1.0
-    assert (
-        macro_f1(CYCLE_LABELS, list(CYCLE_LABELS), CYCLE_LABELS) == 1.0
-    )
+    assert macro_f1(CYCLE_LABELS, list(CYCLE_LABELS), CYCLE_LABELS) == 1.0

@@ -15,9 +15,7 @@ from .config import CHAR_HARDCAP, CYCLE_LABELS, INVALID, RISK_LABELS
 
 def macro_f1(y_true: list[str], y_pred: list[str], labels: list[str]) -> float:
     """클래스 F1의 단순 평균. INVALID/ERROR 예측은 해당 정답 클래스의 오답으로 반영."""
-    return float(
-        f1_score(y_true, y_pred, labels=labels, average="macro", zero_division=0)
-    )
+    return float(f1_score(y_true, y_pred, labels=labels, average="macro", zero_division=0))
 
 
 def efficiency_score(prompt_len: int) -> float:
@@ -39,9 +37,7 @@ def _pred_col(label: str, labels: list[str]) -> str:
     return label if label in labels else INVALID
 
 
-def confusion(
-    y_true: list[str], y_pred: list[str], labels: list[str]
-) -> dict[str, dict[str, int]]:
+def confusion(y_true: list[str], y_pred: list[str], labels: list[str]) -> dict[str, dict[str, int]]:
     """혼동행렬 + INVALID 열. rows=정답, cols=예측(+INVALID)."""
     cols = [*labels, INVALID]
     mat = {t: {c: 0 for c in cols} for t in labels}

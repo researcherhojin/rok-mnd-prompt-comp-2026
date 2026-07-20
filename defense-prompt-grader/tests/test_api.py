@@ -33,10 +33,15 @@ def _wait_done(client, sid, timeout=10.0):
 
 def test_submit_score_leaderboard_detail():
     with TestClient(app) as client:
-        r = client.post("/api/submit", json={
-            "name": "t1", "prompt": "K-511 판단 지침", "split": "sample",
-            "runs": 1,
-        })
+        r = client.post(
+            "/api/submit",
+            json={
+                "name": "t1",
+                "prompt": "K-511 판단 지침",
+                "split": "sample",
+                "runs": 1,
+            },
+        )
         assert r.status_code == 200
         sid = r.json()["id"]
         sub = _wait_done(client, sid)
@@ -53,9 +58,14 @@ def test_submit_score_leaderboard_detail():
 
 def test_hardcap_rejected():
     with TestClient(app) as client:
-        r = client.post("/api/submit", json={
-            "name": "big", "prompt": "가" * (CHAR_HARDCAP + 1), "split": "sample",
-        })
+        r = client.post(
+            "/api/submit",
+            json={
+                "name": "big",
+                "prompt": "가" * (CHAR_HARDCAP + 1),
+                "split": "sample",
+            },
+        )
         assert r.status_code == 422
 
 
@@ -74,10 +84,16 @@ def test_baseline_register():
 
 def test_affiliation_roundtrip():
     with TestClient(app) as client:
-        r = client.post("/api/submit", json={
-            "name": "소속테스트", "affiliation": "육군훈련소", "prompt": "지침",
-            "split": "sample", "runs": 1,
-        })
+        r = client.post(
+            "/api/submit",
+            json={
+                "name": "소속테스트",
+                "affiliation": "육군훈련소",
+                "prompt": "지침",
+                "split": "sample",
+                "runs": 1,
+            },
+        )
         assert r.status_code == 200
         sid = r.json()["id"]
         _wait_done(client, sid)

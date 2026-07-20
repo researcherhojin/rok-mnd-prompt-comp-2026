@@ -28,9 +28,9 @@ def _wire_logging() -> None:
         gl.handlers = uvi.handlers
     gl.setLevel(logging.INFO)
     gl.propagate = False
-app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]
-)
+
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 store = Store()
 # 실행 중 제출: sid → {progress, cancel, task}
@@ -77,8 +77,12 @@ async def _execute(sid: int, prompt: str, split: str, runs: int, model: str | No
 
     try:
         result = await runner.run(
-            prompt, split=split, runs=runs, cfg=_cfg(model),
-            progress_cb=on_progress, cancel=cancel,
+            prompt,
+            split=split,
+            runs=runs,
+            cfg=_cfg(model),
+            progress_cb=on_progress,
+            cancel=cancel,
         )
         if cancel.is_set():
             store.set_status(sid, "cancelled")
@@ -110,7 +114,11 @@ async def submit(body: SubmitBody):
     if len(body.prompt) > CHAR_HARDCAP:
         raise HTTPException(422, f"프롬프트 {len(body.prompt)}자 > {CHAR_HARDCAP}자 하드캡 → 반려")
     sid = store.create(
-        body.name, body.split, body.model or DEFAULT_MODEL_SENTINEL, body.runs, body.prompt,
+        body.name,
+        body.split,
+        body.model or DEFAULT_MODEL_SENTINEL,
+        body.runs,
+        body.prompt,
         affiliation=(body.affiliation or None),
     )
     _start(sid, body.prompt, body.split, body.runs, body.model)
@@ -180,15 +188,22 @@ async def leaderboard():
                 "status": s["status"],
                 "leaderboard_score": r["leaderboard_score"] if r else None,
                 "macro_f1": r["macro_f1_mean"] if r else None,
-                "risk_f1": {k: v["f1"] for k, v in r["primary"]["risk"]["per_class"].items()} if r else None,
-                "cycle_f1": {k: v["f1"] for k, v in r["primary"]["cycle"]["per_class"].items()} if r else None,
+                "risk_f1": {k: v["f1"] for k, v in r["primary"]["risk"]["per_class"].items()}
+                if r
+                else None,
+                "cycle_f1": {k: v["f1"] for k, v in r["primary"]["cycle"]["per_class"].items()}
+                if r
+                else None,
                 "invalid_rate": r["primary"]["invalid_rate"] if r else None,
                 "exact_match_count": r["primary"]["exact_match_count"] if r else None,
                 "n": r["primary"]["n"] if r else None,
             }
         )
     # 채점 완료(점수 있음)를 점수 내림차순 먼저, 그다음 미완료
-    out.sort(key=lambda x: (x["leaderboard_score"] is not None, x["leaderboard_score"] or 0), reverse=True)
+    out.sort(
+        key=lambda x: (x["leaderboard_score"] is not None, x["leaderboard_score"] or 0),
+        reverse=True,
+    )
     return out
 
 
