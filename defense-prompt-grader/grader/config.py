@@ -48,7 +48,7 @@ class LLMConfig:
 
 def load_llm_config() -> LLMConfig:
     return LLMConfig(
-        base_url=os.getenv("LLM_BASE_URL", "http://localhost:8000/v1").rstrip("/"),
+        base_url=os.getenv("LLM_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
         api_key=os.getenv("LLM_API_KEY", "EMPTY"),
         model=os.getenv("LLM_MODEL", "gpt-4o-mini"),
         max_concurrency=int(os.getenv("MAX_CONCURRENCY", "8")),
