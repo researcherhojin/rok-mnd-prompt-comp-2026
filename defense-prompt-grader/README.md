@@ -21,34 +21,38 @@ uv sync            # .venv 생성 + 의존성 설치 (3.12 자동 fetch)
 cp .env.example .env
 ```
 
-`.env`에서 백엔드 선택 (mock 백엔드는 제거됨 — 항상 실제 LLM 재실행):
+`.env`에 **OpenAI API 키**를 넣는다. mock 백엔드는 없다 — 채점은 항상 실제 LLM을 재실행한다.
 
-| 용도 | 설정 |
-|---|---|
-| **로컬 실측** | `LLM_BASE_URL=http://localhost:8000/v1`, `LLM_MODEL=<mlx 모델>` (mlx-openai-server) |
-| **실제 실측** | `LLM_BASE_URL=https://api.openai.com/v1`, `LLM_MODEL=gpt-4o-mini`, `LLM_API_KEY=sk-...` |
-
-> 테스트는 LLM 경계(`llm.complete`)를 스텁으로 대체해 API 호출 없이 파이프라인을 검증한다(`tests/`).
-
-### 로컬 mlx-openai-server 예시
-
-```bash
-# 별도 셸에서 (예시)
-uvx mlx-openai-server --model mlx-community/Qwen2.5-3B-Instruct-4bit --port 8000
-# .env: LLM_BASE_URL=http://localhost:8000/v1  LLM_MODEL=mlx-community/Qwen2.5-3B-Instruct-4bit
+```ini
+LLM_BASE_URL=https://api.openai.com/v1
+LLM_API_KEY=sk-...
+LLM_MODEL=gpt-4o-mini     # 코드 기본값. 대회 확정 모델은 미정
+MAX_CONCURRENCY=8
 ```
 
-## CLI
+`LLM_BASE_URL`은 OpenAI 호환 엔드포인트면 무엇이든 받는다. 다만 **점수는 모델에 종속적이라, 모델을 바꾸면 이 저장소의 어떤 수치와도 비교할 수 없다.** 동일한 650자 프롬프트를 `public` 300행에 돌린 실측(`request/reference_prompts.md`):
+
+| 모델 | prediction_score |
+|---|---|
+| `gpt-5.4-nano` | 0.35 |
+| `gpt-5.4-mini` | 0.54 |
+| `gpt-5.4` | 0.81 |
+
+즉 **모델이 점수 천장을 결정한다** — 규칙을 완전히 담은 프롬프트도 소형 모델에서는 상한이 낮고, 이는 프롬프트 글자수와 무관하다. 점수를 재현·비교하려면 `LLM_MODEL`을 실측 당시와 동일하게 맞춰야 한다.
+
+> **비용 주의:** 캐시가 비어 있을 때 1회 채점 = 행 수 × `--runs` 만큼의 API 호출이다(`public` 1회 = 300 호출, `--runs 2` = 600). 먼저 `--split sample`(10행)로 확인할 것. 응답은 `(프롬프트, 모델, split, 행 id, 실행 회차)` 단위로 `cache.db`에 저장돼 재실행 시 재호출하지 않는다(`--force`로 무시).
+
+## 빠른 시작
 
 ```bash
-make dev                                              # API 서버 (uvicorn, reload)
-uv run grader run --prompt baselines/P1.txt --split public --runs 2
-uv run grader run --prompt baselines/P0.txt --split sample
+uv run pytest -q                                    # ① API 키 없이 파이프라인 검증 (LLM 경계는 스텁)
+uv run grader run --prompt baselines/P0.txt --split sample    # ② 10행 실호출로 연결 확인
+uv run grader run --prompt baselines/P1.txt --split public --runs 2   # ③ 본 실측
 ```
 
 옵션: `--split {sample,public,private}` · `--runs {1,2,3}` · `--model <override>` · `--force`(캐시 무시).
 
-## 채점 API (M2)
+## 채점 API
 
 ```bash
 make dev            # → http://localhost:8080  (docs: /docs)
@@ -65,7 +69,7 @@ make dev            # → http://localhost:8080  (docs: /docs)
 
 정답 라벨(`risk_grade`·`cycle_range`, 각 split 파일에 인라인)은 채점 모듈에서만 접근하며 리더보드·목록 payload에는 노출되지 않는다(누설 방지). 소속(`affiliation`)은 제출 시 선택 입력으로 저장·표시된다.
 
-## 프론트엔드 (M3)
+## 웹 콘솔
 
 React(Vite+TS+Tailwind, 모바일 우선) UI. DACON식 페이지 구성. 상단 3탭 **대회 안내 / 제출 / 리더보드**, 대회 안내는 서브내비 **문제·데이터·평가·규칙**(참가자 안내, 운영자 판정 로직 비노출). 결과 **상세**는 리더보드에서 진입. 내부 **운영·개발**(`/ops`, 하네스·순위 산정 명세)은 푸터 링크(비노출). (게시판은 운영 플랫폼 몫이라 콘솔에서 제외 — 명세만 `request/harness_config_options.md` §6.2.)
 
@@ -97,7 +101,7 @@ uv run pytest -q            # 파서 + 스코어러 앵커 + 러너(LLM 스텁) 
 grader/        순수 채점 코어 (웹 의존성 없음)
   config·data·template·parse·score·llm·cache·runner
   __main__.py  CLI
-api/           FastAPI 채점 서버 (M2) + submissions SQLite (소속 컬럼 포함)
+api/           FastAPI 채점 서버 + submissions SQLite (소속 컬럼 포함)
 web/           React(Vite+TS+Tailwind) 프론트엔드
   views/info/  대회 안내 4페이지(문제·데이터·평가·규칙) + 서브내비
   views/       제출·리더보드·상세·운영(ops)

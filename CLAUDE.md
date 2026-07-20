@@ -77,7 +77,7 @@ A prompt-engineering competition, **not** a predict-file-upload competition:
 - **Harness = 6 fixed stages, one participant-controlled:** `고정 시스템 지시 구성 → 참가자 행동 지침 삽입 → 비공개 데이터 입력 → LLM 실행 → 출력 파싱·검증 → 정답 대조·채점` (stage 2 is the participant's instruction; the host composes a fixed system instruction and merges the participant's behavior instruction + hidden data before running the LLM).
 - Two labels: `risk_grade` (HIGH/MEDIUM/LOW) and `cycle_range` (0-30 / 31-90 / 91-180 / 181+).
 
-Doc roles: `competition_design_brief` = *what* (data/labels/scoring); `system_functional_spec` = *how* (components/DB/pipeline); `dev_architecture_plan` = infra (front/back/DB); `dev_workplan_scoring_leaderboard` = implementation pseudocode.
+Doc roles (all 6 of `request/`): `competition_design_brief` = *what* (data/labels/scoring); `system_functional_spec` = *how* (components/DB/pipeline); `dev_architecture_plan` = infra (front/back/DB); `dev_workplan_scoring_leaderboard` = implementation pseudocode; `harness_config_options` = 주최측이 고를 운영 옵션 메뉴 (§6.2 게시판 스펙 포함 — 콘솔에는 미구현); `reference_prompts` = 실측 참고 프롬프트 + 모델별 점수 천장 근거.
 
 > Open design question (flagged in the docs' "열린 항목"): the official `Data_Sample` reference shows a **multi-node agent chain + LLM-as-Judge**, whereas the current design is single-node. Do not silently resolve this.
 
